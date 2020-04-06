@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.Dao.WorkRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.test.Entities.WorkRecord" >
+    <id column="wID" property="wID" jdbcType="INTEGER" />
+    <result column="question" property="question" jdbcType="VARCHAR" />
+    <result column="beginDate" property="beginDate" jdbcType="TIMESTAMP" />
+    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="userID" property="userID" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wID, question, beginDate, endDate, comment, level, status, userID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from workrecord
+    where wID = #{wID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from workrecord
+    where wID = #{wID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.Entities.WorkRecord" >
+    insert into workrecord (wID, question, beginDate, 
+      endDate, comment, level, 
+      status, userID)
+    values (#{wID,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{beginDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{userID,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.Entities.WorkRecord" >
+    insert into workrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wID != null" >
+        wID,
+      </if>
+      <if test="question != null" >
+        question,
+      </if>
+      <if test="beginDate != null" >
+        beginDate,
+      </if>
+      <if test="endDate != null" >
+        endDate,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="userID != null" >
+        userID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wID != null" >
+        #{wID,jdbcType=INTEGER},
+      </if>
+      <if test="question != null" >
+        #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userID != null" >
+        #{userID,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.WorkRecord" >
+    update workrecord
+    <set >
+      <if test="question != null" >
+        question = #{question,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        beginDate = #{beginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        endDate = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="userID != null" >
+        userID = #{userID,jdbcType=INTEGER},
+      </if>
+    </set>
+    where wID = #{wID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.Entities.WorkRecord" >
+    update workrecord
+    set question = #{question,jdbcType=VARCHAR},
+      beginDate = #{beginDate,jdbcType=TIMESTAMP},
+      endDate = #{endDate,jdbcType=TIMESTAMP},
+      comment = #{comment,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      userID = #{userID,jdbcType=INTEGER}
+    where wID = #{wID,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.Dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.test.Entities.User" >
+    <id column="userID" property="userID" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="registerDate" property="registerDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="mID" property="mID" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    userID, username, password, phone, registerDate, status, mID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userID = #{userID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where userID = #{userID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.Entities.User" >
+    insert into user (userID, username, password, 
+      phone, registerDate, status, 
+      mID)
+    values (#{userID,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{registerDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{mID,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.Entities.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userID != null" >
+        userID,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="registerDate != null" >
+        registerDate,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="mID != null" >
+        mID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userID != null" >
+        #{userID,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mID != null" >
+        #{mID,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.User" >
+    update user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        registerDate = #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mID != null" >
+        mID = #{mID,jdbcType=INTEGER},
+      </if>
+    </set>
+    where userID = #{userID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.Entities.User" >
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      registerDate = #{registerDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      mID = #{mID,jdbcType=INTEGER}
+    where userID = #{userID,jdbcType=INTEGER}
+  </update>
+</mapper>

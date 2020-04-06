@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.Dao.ChatRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.test.Entities.ChatRecord" >
+    <id column="rID" property="rID" jdbcType="INTEGER" />
+    <result column="rDate" property="rDate" jdbcType="TIMESTAMP" />
+    <result column="rPath" property="rPath" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="enclosure" property="enclosure" jdbcType="VARCHAR" />
+    <result column="userID" property="userID" jdbcType="INTEGER" />
+    <result column="mID" property="mID" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rID, rDate, rPath, status, comment, level, enclosure, userID, mID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from chatrecord
+    where rID = #{rID,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from chatrecord
+    where rID = #{rID,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.test.Entities.ChatRecord" >
+    insert into chatrecord (rID, rDate, rPath, 
+      status, comment, level, 
+      enclosure, userID, mID
+      )
+    values (#{rID,jdbcType=INTEGER}, #{rDate,jdbcType=TIMESTAMP}, #{rPath,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{comment,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
+      #{enclosure,jdbcType=VARCHAR}, #{userID,jdbcType=INTEGER}, #{mID,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.Entities.ChatRecord" >
+    insert into chatrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rID != null" >
+        rID,
+      </if>
+      <if test="rDate != null" >
+        rDate,
+      </if>
+      <if test="rPath != null" >
+        rPath,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="enclosure != null" >
+        enclosure,
+      </if>
+      <if test="userID != null" >
+        userID,
+      </if>
+      <if test="mID != null" >
+        mID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rID != null" >
+        #{rID,jdbcType=INTEGER},
+      </if>
+      <if test="rDate != null" >
+        #{rDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rPath != null" >
+        #{rPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="enclosure != null" >
+        #{enclosure,jdbcType=VARCHAR},
+      </if>
+      <if test="userID != null" >
+        #{userID,jdbcType=INTEGER},
+      </if>
+      <if test="mID != null" >
+        #{mID,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.ChatRecord" >
+    update chatrecord
+    <set >
+      <if test="rDate != null" >
+        rDate = #{rDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rPath != null" >
+        rPath = #{rPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="enclosure != null" >
+        enclosure = #{enclosure,jdbcType=VARCHAR},
+      </if>
+      <if test="userID != null" >
+        userID = #{userID,jdbcType=INTEGER},
+      </if>
+      <if test="mID != null" >
+        mID = #{mID,jdbcType=INTEGER},
+      </if>
+    </set>
+    where rID = #{rID,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.Entities.ChatRecord" >
+    update chatrecord
+    set rDate = #{rDate,jdbcType=TIMESTAMP},
+      rPath = #{rPath,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      enclosure = #{enclosure,jdbcType=VARCHAR},
+      userID = #{userID,jdbcType=INTEGER},
+      mID = #{mID,jdbcType=INTEGER}
+    where rID = #{rID,jdbcType=INTEGER}
+  </update>
+</mapper>
