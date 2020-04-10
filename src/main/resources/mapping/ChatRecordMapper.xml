@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.test.Dao.ChatRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.test.Entities.ChatRecord" >
+<mapper namespace="com.test.dao.ChatRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.test.entities.ChatRecord" >
     <id column="rID" property="rID" jdbcType="INTEGER" />
     <result column="rDate" property="rDate" jdbcType="TIMESTAMP" />
     <result column="rPath" property="rPath" jdbcType="VARCHAR" />
@@ -25,7 +25,7 @@
     delete from chatrecord
     where rID = #{rID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.test.Entities.ChatRecord" >
+  <insert id="insert" parameterType="com.test.entities.ChatRecord" >
     insert into chatrecord (rID, rDate, rPath, 
       status, comment, level, 
       enclosure, userID, mID
@@ -35,7 +35,7 @@
       #{enclosure,jdbcType=VARCHAR}, #{userID,jdbcType=INTEGER}, #{mID,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.test.Entities.ChatRecord" >
+  <insert id="insertSelective" parameterType="com.test.entities.ChatRecord" >
     insert into chatrecord
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="rID != null" >
@@ -96,7 +96,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.ChatRecord" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.entities.ChatRecord" >
     update chatrecord
     <set >
       <if test="rDate != null" >
@@ -126,7 +126,7 @@
     </set>
     where rID = #{rID,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.Entities.ChatRecord" >
+  <update id="updateByPrimaryKey" parameterType="com.test.entities.ChatRecord" >
     update chatrecord
     set rDate = #{rDate,jdbcType=TIMESTAMP},
       rPath = #{rPath,jdbcType=VARCHAR},

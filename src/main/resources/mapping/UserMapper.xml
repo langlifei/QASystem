@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.test.Dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.test.Entities.User" >
+<mapper namespace="com.test.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.test.entities.User" >
     <id column="userID" property="userID" jdbcType="INTEGER" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="registerDate" property="registerDate" jdbcType="TIMESTAMP" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="mID" property="mID" jdbcType="INTEGER" />
+    <result column="verifier" property="verifier" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    userID, username, password, phone, registerDate, status, mID
+    userID, username, password, phone, registerDate, role, status, verifier
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -19,19 +20,25 @@
     from user
     where userID = #{userID,jdbcType=INTEGER}
   </select>
+  <select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    *
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user
     where userID = #{userID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.test.Entities.User" >
+  <insert id="insert" parameterType="com.test.entities.User" >
     insert into user (userID, username, password, 
-      phone, registerDate, status, 
-      mID)
+      phone, registerDate, role, 
+      status, verifier)
     values (#{userID,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{phone,jdbcType=VARCHAR}, #{registerDate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{mID,jdbcType=INTEGER})
+      #{phone,jdbcType=VARCHAR}, #{registerDate,jdbcType=TIMESTAMP}, #{role,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{verifier,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.test.Entities.User" >
+  <insert id="insertSelective" parameterType="com.test.entities.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userID != null" >
@@ -49,11 +56,14 @@
       <if test="registerDate != null" >
         registerDate,
       </if>
+      <if test="role != null" >
+        role,
+      </if>
       <if test="status != null" >
         status,
       </if>
-      <if test="mID != null" >
-        mID,
+      <if test="verifier != null" >
+        verifier,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -72,15 +82,18 @@
       <if test="registerDate != null" >
         #{registerDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="role != null" >
+        #{role,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="mID != null" >
-        #{mID,jdbcType=INTEGER},
+      <if test="verifier != null" >
+        #{verifier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.entities.User" >
     update user
     <set >
       <if test="username != null" >
@@ -95,23 +108,27 @@
       <if test="registerDate != null" >
         registerDate = #{registerDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="mID != null" >
-        mID = #{mID,jdbcType=INTEGER},
+      <if test="verifier != null" >
+        verifier = #{verifier,jdbcType=VARCHAR},
       </if>
     </set>
     where userID = #{userID,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.Entities.User" >
+  <update id="updateByPrimaryKey" parameterType="com.test.entities.User" >
     update user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       registerDate = #{registerDate,jdbcType=TIMESTAMP},
+      role = #{role,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      mID = #{mID,jdbcType=INTEGER}
+      verifier = #{verifier,jdbcType=VARCHAR}
     where userID = #{userID,jdbcType=INTEGER}
   </update>
 </mapper>

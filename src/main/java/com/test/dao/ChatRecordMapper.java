@@ -1,6 +1,6 @@
-package com.test.Dao;
+package com.test.dao;
 
-import com.test.Entities.ChatRecord;
+import com.test.entities.ChatRecord;
 
 public interface ChatRecordMapper {
     int deleteByPrimaryKey(Integer rID);

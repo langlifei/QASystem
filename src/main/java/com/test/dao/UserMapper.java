@@ -1,6 +1,6 @@
-package com.test.Dao;
+package com.test.dao;
 
-import com.test.Entities.User;
+import com.test.entities.User;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer userID);
@@ -10,6 +10,8 @@ public interface UserMapper {
     int insertSelective(User record);
 
     User selectByPrimaryKey(Integer userID);
+
+    User selectByUsername(String username);
 
     int updateByPrimaryKeySelective(User record);
 

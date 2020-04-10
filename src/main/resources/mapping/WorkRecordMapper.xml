@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.test.Dao.WorkRecordMapper" >
-  <resultMap id="BaseResultMap" type="com.test.Entities.WorkRecord" >
+<mapper namespace="com.test.dao.WorkRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.test.entities.WorkRecord" >
     <id column="wID" property="wID" jdbcType="INTEGER" />
     <result column="question" property="question" jdbcType="VARCHAR" />
     <result column="beginDate" property="beginDate" jdbcType="TIMESTAMP" />
@@ -24,7 +24,7 @@
     delete from workrecord
     where wID = #{wID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.test.Entities.WorkRecord" >
+  <insert id="insert" parameterType="com.test.entities.WorkRecord" >
     insert into workrecord (wID, question, beginDate, 
       endDate, comment, level, 
       status, userID)
@@ -32,7 +32,7 @@
       #{endDate,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER}, #{userID,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.test.Entities.WorkRecord" >
+  <insert id="insertSelective" parameterType="com.test.entities.WorkRecord" >
     insert into workrecord
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="wID != null" >
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.WorkRecord" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.entities.WorkRecord" >
     update workrecord
     <set >
       <if test="question != null" >
@@ -114,7 +114,7 @@
     </set>
     where wID = #{wID,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.Entities.WorkRecord" >
+  <update id="updateByPrimaryKey" parameterType="com.test.entities.WorkRecord" >
     update workrecord
     set question = #{question,jdbcType=VARCHAR},
       beginDate = #{beginDate,jdbcType=TIMESTAMP},

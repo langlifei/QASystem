@@ -1,4 +1,4 @@
-package com.test.Entities;
+package com.test.entities;
 
 import java.util.Date;
 
@@ -13,9 +13,11 @@ public class User {
 
     private Date registerDate;
 
+    private String role;
+
     private Integer status;
 
-    private Integer mID;
+    private String verifier;
 
     public Integer getUserID() {
         return userID;
@@ -57,6 +59,14 @@ public class User {
         this.registerDate = registerDate;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role == null ? null : role.trim();
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -65,11 +75,11 @@ public class User {
         this.status = status;
     }
 
-    public Integer getmID() {
-        return mID;
+    public String getVerifier() {
+        return verifier;
     }
 
-    public void setmID(Integer mID) {
-        this.mID = mID;
+    public void setVerifier(String verifier) {
+        this.verifier = verifier == null ? null : verifier.trim();
     }
 }

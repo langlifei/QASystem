@@ -1,6 +1,6 @@
 package com.test.webSocket;
 
-import com.test.utils.GsonUtils;
+import com.test.util.GsonUtils;
 import com.test.vo.Message;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;

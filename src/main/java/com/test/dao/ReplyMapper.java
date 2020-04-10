@@ -1,6 +1,6 @@
-package com.test.Dao;
+package com.test.dao;
 
-import com.test.Entities.Reply;
+import com.test.entities.Reply;
 
 public interface ReplyMapper {
     int deleteByPrimaryKey(Integer rID);

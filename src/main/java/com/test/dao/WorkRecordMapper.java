@@ -1,6 +1,6 @@
-package com.test.Dao;
+package com.test.dao;
 
-import com.test.Entities.WorkRecord;
+import com.test.entities.WorkRecord;
 
 public interface WorkRecordMapper {
     int deleteByPrimaryKey(Integer wID);

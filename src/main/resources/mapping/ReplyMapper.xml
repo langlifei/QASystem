@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.test.Dao.ReplyMapper" >
-  <resultMap id="BaseResultMap" type="com.test.Entities.Reply" >
+<mapper namespace="com.test.dao.ReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.test.entities.Reply" >
     <id column="rID" property="rID" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="replyTime" property="replyTime" jdbcType="TIMESTAMP" />
@@ -21,13 +21,13 @@
     delete from reply
     where rID = #{rID,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.test.Entities.Reply" >
+  <insert id="insert" parameterType="com.test.entities.Reply" >
     insert into reply (rID, content, replyTime, 
       wID, mID)
     values (#{rID,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{replyTime,jdbcType=TIMESTAMP}, 
       #{wID,jdbcType=INTEGER}, #{mID,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.test.Entities.Reply" >
+  <insert id="insertSelective" parameterType="com.test.entities.Reply" >
     insert into reply
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="rID != null" >
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.test.Entities.Reply" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.entities.Reply" >
     update reply
     <set >
       <if test="content != null" >
@@ -82,7 +82,7 @@
     </set>
     where rID = #{rID,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.test.Entities.Reply" >
+  <update id="updateByPrimaryKey" parameterType="com.test.entities.Reply" >
     update reply
     set content = #{content,jdbcType=VARCHAR},
       replyTime = #{replyTime,jdbcType=TIMESTAMP},
