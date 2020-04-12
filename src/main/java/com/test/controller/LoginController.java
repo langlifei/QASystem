@@ -24,6 +24,12 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 登录
+     * @param user 必须传入用户名和密码
+     * @param httpServletResponse
+     * @return 1:{code:200,msg:登录成功,null} 0:{code:400,msg:用户密码错误,null}
+     */
     @PostMapping("/login")
     public ResponseBean login(@RequestBody User user, HttpServletResponse httpServletResponse){
         User userInfo = userService.selectOne(user.getUsername());
@@ -43,6 +49,6 @@ public class LoginController {
             httpServletResponse.setHeader(JwtUtil.TOKEN_HEADER,token);
             return new ResponseBean(HttpStatus.OK.value(),"登录成功!",null);
         }else
-            return new ResponseBean(HttpStatus.SERVICE_UNAVAILABLE.value(),"用户密码错误...",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户密码错误...",null);
     }
 }

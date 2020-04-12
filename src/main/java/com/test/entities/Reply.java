@@ -1,5 +1,7 @@
 package com.test.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Reply {
@@ -7,11 +9,12 @@ public class Reply {
 
     private String content;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date replyTime;
 
     private Integer wID;
 
-    private Integer mID;
+    private Integer userID;
 
     public Integer getrID() {
         return rID;
@@ -45,11 +48,11 @@ public class Reply {
         this.wID = wID;
     }
 
-    public Integer getmID() {
-        return mID;
+    public Integer getUserID() {
+        return userID;
     }
 
-    public void setmID(Integer mID) {
-        this.mID = mID;
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 }

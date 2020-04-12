@@ -2,6 +2,8 @@ package com.test.dao;
 
 import com.test.entities.User;
 
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Integer userID);
 
@@ -16,4 +18,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    List<User> selectAllByStatus(Integer status);
 }

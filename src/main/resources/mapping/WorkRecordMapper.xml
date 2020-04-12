@@ -9,16 +9,21 @@
     <result column="comment" property="comment" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="userID" property="userID" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    wID, question, beginDate, endDate, comment, level, status, userID
+    wID, question, beginDate, endDate, comment, level, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    <include refid="Base_Column_List" />
+    *
     from workrecord
     where wID = #{wID,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+        <include refid="Base_Column_List" />
+    from workrecord
+    where userID=#{userID,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from workrecord

@@ -25,11 +25,6 @@ import java.util.Map;
 @Component
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
-    @Autowired
-    private  RedisUtil redisUtil;
-
-
-
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {

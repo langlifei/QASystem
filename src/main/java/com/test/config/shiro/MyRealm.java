@@ -1,10 +1,13 @@
-package com.test.realm;
+package com.test.config.shiro;
 
 import com.test.config.shiro.jwt.JwtToken;
 import com.test.entities.User;
 import com.test.service.UserService;
 import com.test.util.JwtUtil;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -56,7 +59,7 @@ public class MyRealm extends AuthorizingRealm {
                 return new SimpleAuthenticationInfo(token,token,getName());
             }
         }catch (AuthenticationException e){
-            throw e;
+            System.out.println(e.getMessage());
         }
         throw new AuthenticationException("Token被更改或过期!");
     }

@@ -19,4 +19,6 @@ public interface UserService {
     public boolean insert(User user);
 
     public String getRole(Integer userID);
+
+    public User selectByUserID(Integer userID);
 }

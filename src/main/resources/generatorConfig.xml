@@ -39,17 +39,17 @@
         </javaClientGenerator>
 
         <!--生成对应表及类名-->
-        <table tableName="user" schema = "workorders" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-            <property name="useActualColumnNames" value="true"/>
-        </table>
+<!--        <table tableName="user" schema = "workorders" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
+<!--            <property name="useActualColumnNames" value="true"/>-->
+<!--        </table>-->
 <!--        <table tableName="chatRecord" schema = "workorders" domainObjectName="ChatRecord" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
 <!--            <property name="useActualColumnNames" value="true"/>-->
 <!--        </table>-->
 <!--        <table tableName="workRecord" schema = "workorders" domainObjectName="WorkRecord" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
 <!--            <property name="useActualColumnNames" value="true"/>-->
 <!--        </table>-->
-<!--        <table tableName="reply" schema = "workorders" domainObjectName="Reply" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
-<!--            <property name="useActualColumnNames" value="true"/>-->
-<!--        </table>-->
+        <table tableName="reply" schema = "workorders" domainObjectName="Reply" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
     </context>
 </generatorConfiguration>

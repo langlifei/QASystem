@@ -47,4 +47,9 @@ public class UserServiceImp implements UserService {
     public String getRole(Integer userID) {
         return userMapper.selectByPrimaryKey(userID).getRole();
     }
+
+    @Override
+    public User selectByUserID(Integer userID) {
+       return userMapper.selectByPrimaryKey(userID);
+    }
 }

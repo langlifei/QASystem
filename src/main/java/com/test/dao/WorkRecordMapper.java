@@ -2,6 +2,8 @@ package com.test.dao;
 
 import com.test.entities.WorkRecord;
 
+import java.util.List;
+
 public interface WorkRecordMapper {
     int deleteByPrimaryKey(Integer wID);
 
@@ -14,4 +16,6 @@ public interface WorkRecordMapper {
     int updateByPrimaryKeySelective(WorkRecord record);
 
     int updateByPrimaryKey(WorkRecord record);
+
+    List<WorkRecord> selectByUserID(Integer userID);
 }

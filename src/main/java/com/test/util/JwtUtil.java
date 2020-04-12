@@ -7,13 +7,14 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
 public class JwtUtil {
 
     private static final String SECRET = "d46baea9-924b-472b-97f6-b8bc577d6a08";//由UUID随机生成
-    private static final long EXPIRATION = 15*60*1000;//设置时间为15分钟
+    private static final long EXPIRATION = 1*60*1000;//设置时间为15分钟
     public static final String TOKEN_HEADER="Authorization";
     public static final String TOKEN_PREFIX="Bearer";
     private static final String REFRESH_TOKEN="REFRESH_TOKEN:";
@@ -25,6 +26,12 @@ public class JwtUtil {
 
     public static long getRefreshTokenExpiration() {
         return REFRESH_TOKEN_EXPIRATION;
+    }
+
+
+    public static String getToken(HttpServletRequest request){
+        String token = request.getHeader(TOKEN_HEADER).replace(TOKEN_PREFIX,"").trim();
+        return token;
     }
 
     /**

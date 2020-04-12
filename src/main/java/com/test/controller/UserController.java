@@ -16,14 +16,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 注册用户
+     * @param user 必须传入用户名(必须唯一),用户密码,手机号码
+     * @return
+     */
     @PostMapping("/add")
     public ResponseBean add(@RequestBody User user){
         if(userService.insert(user))
-            return new ResponseBean(HttpStatus.OK.value(),"新增用户成功",null);
+            return new ResponseBean(HttpStatus.OK.value(),"新增用户成功!",null);
         else
-            return new ResponseBean(HttpStatus.NOT_IMPLEMENTED.value(),"新增用户失败",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"新增用户失败!",null);
     }
 
-
+    /**
+     * 根据用户名查看该用户是否存在
+     * @param username 用户名
+     * @return
+     */
+    @GetMapping("/{username}")
+    public ResponseBean isExist(@PathVariable String username){
+        if(userService.selectOne(username)!=null)
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名已存在!",null);
+        else
+            return new ResponseBean(HttpStatus.OK.value(),"该用户名可用!",null);
+    }
 
 }
