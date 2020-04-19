@@ -23,7 +23,7 @@ public class UserController {
      */
     @PostMapping("/add")
     public ResponseBean add(@RequestBody User user){
-        if(userService.insert(user))
+        if(userService.insert(user)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"新增用户成功!",null);
         else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"新增用户失败!",null);
@@ -31,12 +31,12 @@ public class UserController {
 
     /**
      * 根据用户名查看该用户是否存在
-     * @param username 用户名
+     * @param user 用户(只接收用户名)
      * @return
      */
-    @GetMapping("/{username}")
-    public ResponseBean isExist(@PathVariable String username){
-        if(userService.selectOne(username)!=null)
+    @GetMapping("/username")
+    public ResponseBean isExist(@RequestBody User user){
+        if(userService.selectOne(user.getUsername())!=null)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名已存在!",null);
         else
             return new ResponseBean(HttpStatus.OK.value(),"该用户名可用!",null);

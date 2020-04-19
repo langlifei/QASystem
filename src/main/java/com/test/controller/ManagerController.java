@@ -49,7 +49,7 @@ public class ManagerController {
 
     /**
      * 审核用户
-     * @param user 必须传入用户的ID,用户当前的状态
+     * @param user 必须传入用户的ID,用户名,用户当前的状态
      * @param request
      * @return 1:{code:200,msg:修改状态成功!,null} 0:{code:400,msg:修改失败!,null}
      */
@@ -58,7 +58,8 @@ public class ManagerController {
     public ResponseBean changeUserStatus(@RequestBody User user,HttpServletRequest request){
         String token = request.getHeader(JwtUtil.TOKEN_HEADER).replace(JwtUtil.TOKEN_PREFIX,"").trim();
         String verifier = JwtUtil.getClaim(token,"username");
-        if(managerService.updateUserStatus(user.getUserID(),user.getStatus(),verifier))
+        user.setVerifier(verifier);
+        if(managerService.updateUserStatus(user)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"修改状态成功!",null);
         else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"修改失败!",null);

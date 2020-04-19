@@ -32,9 +32,9 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        String userID = JwtUtil.getClaim(principalCollection.toString(),"userID");
+        String username = JwtUtil.getClaim(principalCollection.toString(),"username");
         //获取用户的角色
-        String role = userService.getRole(Integer.parseInt(userID));
+        String role = userService.selectOne(username).getRole();
         simpleAuthorizationInfo.addRole(role);
         return simpleAuthorizationInfo;
     }

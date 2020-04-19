@@ -56,6 +56,8 @@ public class ShiroConfig {
         //开放登录,注册接口
         filterChainDefinitionMap.put("/login","anon");
         filterChainDefinitionMap.put("/user/add","anon");
+        filterChainDefinitionMap.put("/user/username","anon");
+//        filterChainDefinitionMap.put("/user/{username}","anon");
 //        filterChainDefinitionMap.put("/user/**","roles[user]");
 //        filterChainDefinitionMap.put("/admin/**","roles[admin]");
         //注:该行代码放在所有权限设置的后面.

@@ -14,7 +14,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private static final String SECRET = "d46baea9-924b-472b-97f6-b8bc577d6a08";//由UUID随机生成
-    private static final long EXPIRATION = 1*60*1000;//设置时间为15分钟
+    private static final long EXPIRATION = 15*60*1000;//设置时间为15分钟
     public static final String TOKEN_HEADER="Authorization";
     public static final String TOKEN_PREFIX="Bearer";
     private static final String REFRESH_TOKEN="REFRESH_TOKEN:";

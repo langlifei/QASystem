@@ -1,21 +1,20 @@
 package com.test.service.imp;
 
 import com.test.dao.ReplyMapper;
-import com.test.dao.UserMapper;
 import com.test.dao.WorkRecordMapper;
 import com.test.entities.Reply;
-import com.test.entities.User;
 import com.test.entities.WorkRecord;
 import com.test.service.WorkRecordService;
-import com.test.vo.ResponseBean;
 import com.test.vo.WorkRecordDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class WorkRecordImp implements WorkRecordService {
@@ -32,13 +31,14 @@ public class WorkRecordImp implements WorkRecordService {
      * @return 是否创建成功
      */
     @Override
-    public boolean insert(WorkRecord workRecord) {
+    public WorkRecord insert(WorkRecord workRecord) {
+        workRecord.setUUID(UUID.randomUUID().toString());
         workRecord.setBeginDate(new Date());//将当前时间设置为工单创建时间
         workRecord.setStatus(0);//设置为0
         if(workRecordMapper.insertSelective(workRecord)>0)
-            return true;
+            return workRecord;
         else
-            return false;
+            return null;
     }
 
     /**
@@ -57,13 +57,25 @@ public class WorkRecordImp implements WorkRecordService {
      * @return 是否修改成功
      */
     @Override
-    public boolean updateWorkRecord(WorkRecord workRecord) {
+    @CachePut(value = "WorkRecord",key = "#workRecord.wID",unless = "#result==null")
+    public WorkRecord updateWorkRecord(WorkRecord workRecord) {
         if(workRecord.getStatus()!=null&&workRecord.getStatus()==1)
             workRecord.setEndDate(new Date());
         if(workRecordMapper.updateByPrimaryKeySelective(workRecord)>0)
-            return true;
+            return workRecord;
         else
-            return false;
+            return null;
+    }
+
+    /**
+     * 根据工单ID查找对应的工单信息
+     * @param wID
+     * @return
+     */
+    @Override
+    @Cacheable(value = "WorkRecord",key = "#wID",unless = "#result==null")
+    public WorkRecord selectByWID(Integer wID) {
+        return workRecordMapper.selectByPrimaryKey(wID);
     }
 
     /**
@@ -80,17 +92,8 @@ public class WorkRecordImp implements WorkRecordService {
             return false;
     }
 
-    /**
-     * 根据工单ID查找对应的工单信息
-     * @param wID
-     * @return
-     */
     @Override
-    public WorkRecord selectByWID(Integer wID) {
-        return workRecordMapper.selectByPrimaryKey(wID);
-    }
-
-    @Override
+    @Cacheable(value = "WorkRecord",key = "'detail'+#wID",unless = "#result.workRecord.status!=3")
     public WorkRecordDetail getWorkRecordDetail(Integer wID) {
         WorkRecord workRecord = selectByWID(wID);
         if(workRecord==null)
@@ -104,8 +107,7 @@ public class WorkRecordImp implements WorkRecordService {
         workRecordDetail.setWorkRecord(workRecord);
         List<Reply> replies = new ArrayList<>();
         replies.add(reply);//添加第一条回复信息
-        if(!replies.addAll(replyMapper.selectByWID(wID)))
-            return null;
+        replies.addAll(replyMapper.selectByWID(wID));
         workRecordDetail.setReplies(replies);
         return workRecordDetail;
     }

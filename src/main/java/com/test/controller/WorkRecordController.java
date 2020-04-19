@@ -32,14 +32,14 @@ public class WorkRecordController {
         String token = JwtUtil.getToken(request);
         Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
         workRecord.setUserID(userID);
-        if(workRecordService.insert(workRecord))
+        if(workRecordService.insert(workRecord)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"创建工单成功!",null);
         else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"创建工单失败!",null);
     }
 
     /**
-     * 获取用户的所有工单
+     * 获取所有工单
      * @param request 用于获取用户ID
      * @return
      */
@@ -50,6 +50,8 @@ public class WorkRecordController {
         String token = JwtUtil.getToken(request);
         Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
         List<WorkRecord> workRecords = workRecordService.getAllRecordsByUserID(userID);
+        if(workRecords.size()==0)
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"您还没有工单创建过工单,快去创建吧!",null);
         return new ResponseBean(HttpStatus.OK.value(),"查找工单成功!",workRecords);
     }
 
@@ -60,13 +62,15 @@ public class WorkRecordController {
      */
     @RequiresRoles("user")
     @PutMapping("/shutdown/{wID}")
-    public ResponseBean shutdownRecord(@PathVariable("wID") Integer wID){
+    public ResponseBean shutdownRecord(@PathVariable("wID") Integer wID,HttpServletRequest request){
+        String  token = JwtUtil.getToken(request);
+        int userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
         WorkRecord workRecord = workRecordService.selectByWID(wID);
-        if(workRecord==null)
+        if(workRecord==null&&workRecord.getUserID()==userID)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"输入信息有误!",null);
         workRecord.setStatus(1);
         //status:1表示订单终结.
-        if(workRecordService.updateWorkRecord(workRecord))
+        if(workRecordService.updateWorkRecord(workRecord)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"工单已关闭!",null);
         else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单编号有误!",null);
@@ -82,6 +86,8 @@ public class WorkRecordController {
     public ResponseBean comment(@RequestBody WorkRecord workRecord){
         if(workRecord.getStatus()!=1)
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单还未关闭,关闭后再来评价!",null);
+        else if(workRecord.getLevel()<1||workRecord.getLevel()>5)
+            return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"评星等级必须在1~5之间",null);
         workRecordService.updateWorkRecord(workRecord);
         return new ResponseBean(HttpStatus.OK.value(),"评价成功!",null);
     }

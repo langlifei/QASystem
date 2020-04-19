@@ -1,18 +1,17 @@
 package com.test.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class WorkRecord {
+public class WorkRecord implements Serializable {
     private Integer wID;
+
+    private String UUID;
 
     private String question;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date beginDate;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endDate;
 
     private String comment;
@@ -29,6 +28,14 @@ public class WorkRecord {
 
     public void setwID(Integer wID) {
         this.wID = wID;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID == null ? null : UUID.trim();
     }
 
     public String getQuestion() {

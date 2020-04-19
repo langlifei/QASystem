@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface WorkRecordService {
 
-    public boolean insert(WorkRecord workRecord);
+    public WorkRecord insert(WorkRecord workRecord);
     public List<WorkRecord> getAllRecordsByUserID(Integer userID);
-    boolean updateWorkRecord(WorkRecord workRecord);
+    WorkRecord updateWorkRecord(WorkRecord workRecord);
     boolean insertReply(Reply reply);
     WorkRecord selectByWID(Integer wID);
     WorkRecordDetail getWorkRecordDetail(Integer wID);

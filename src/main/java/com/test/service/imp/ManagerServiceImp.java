@@ -1,14 +1,13 @@
 package com.test.service.imp;
+
 import com.test.dao.UserMapper;
 import com.test.entities.User;
 import com.test.service.ManagerService;
 import com.test.util.RedisUtil;
-import org.apache.catalina.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -23,21 +22,24 @@ public class ManagerServiceImp implements ManagerService {
     }
 
     @Override
-    public boolean updateUserStatus(Integer userID, Integer status,String verifier) {
-        User user = new User();
-        user.setUserID(userID);
-        switch (status){
+    public User updateUserStatus(User user) {
+        switch (user.getStatus()){
             case 0:
             case 1:
-                user.setStatus(status);
                 break;
             default:
-                return false;
+                return null;
         }
-        user.setVerifier(verifier);
-        if(userMapper.updateByPrimaryKeySelective(user)>0)
-            return true;
-        else
-            return false;
+        if(userMapper.updateByPrimaryKeySelective(user)>0){
+            //如果缓存中有该用户信息,对其进行更新.
+            if(RedisUtil.hasKey(UserServiceImp.KEY_PREFIX+user.getUsername())){
+                User newUser = (User) RedisUtil.get(UserServiceImp.KEY_PREFIX+user.getUsername());
+                newUser.setStatus(user.getStatus());
+                newUser.setVerifier(user.getVerifier());
+                RedisUtil.set(UserServiceImp.KEY_PREFIX+user.getUsername(),newUser, Duration.ofHours(1).getSeconds());
+                return user;
+            }
+        }
+        return null;
     }
 }

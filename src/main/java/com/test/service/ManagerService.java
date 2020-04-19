@@ -8,5 +8,5 @@ public interface ManagerService {
 
     List<User> selectAllUserByStatus(Integer status);
 
-    boolean updateUserStatus(Integer userID, Integer status,String verifier);
+    User updateUserStatus(User user);
 }

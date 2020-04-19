@@ -3,6 +3,7 @@
 <mapper namespace="com.test.dao.WorkRecordMapper" >
   <resultMap id="BaseResultMap" type="com.test.entities.WorkRecord" >
     <id column="wID" property="wID" jdbcType="INTEGER" />
+    <result column="UUID" property="UUID" jdbcType="VARCHAR" />
     <result column="question" property="question" jdbcType="VARCHAR" />
     <result column="beginDate" property="beginDate" jdbcType="TIMESTAMP" />
     <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
@@ -11,17 +12,23 @@
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    wID, question, beginDate, endDate, comment, level, status
+    wID, UUID, question, beginDate, endDate, comment, level, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
-    *
+    <include refid="Base_Column_List" />
     from workrecord
     where wID = #{wID,jdbcType=INTEGER}
   </select>
+  <select id="selectByUUID" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from workrecord
+    where UUID = #{uuid,jdbcType=INTEGER}
+  </select>
   <select id="selectByUserID" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select
-        <include refid="Base_Column_List" />
+    <include refid="Base_Column_List" />
     from workrecord
     where userID=#{userID,jdbcType=INTEGER}
   </select>
@@ -30,18 +37,23 @@
     where wID = #{wID,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.test.entities.WorkRecord" >
-    insert into workrecord (wID, question, beginDate, 
-      endDate, comment, level, 
-      status, userID)
-    values (#{wID,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{beginDate,jdbcType=TIMESTAMP}, 
-      #{endDate,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{userID,jdbcType=INTEGER})
+    insert into workrecord (wID, UUID, question, 
+      beginDate, endDate, comment, 
+      level, status, userID
+      )
+    values (#{wID,jdbcType=INTEGER}, #{UUID,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR}, 
+      #{beginDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, 
+      #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{userID,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.test.entities.WorkRecord" >
     insert into workrecord
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="wID != null" >
         wID,
+      </if>
+      <if test="UUID != null" >
+        UUID,
       </if>
       <if test="question != null" >
         question,
@@ -69,6 +81,9 @@
       <if test="wID != null" >
         #{wID,jdbcType=INTEGER},
       </if>
+      <if test="UUID != null" >
+        #{UUID,jdbcType=VARCHAR},
+      </if>
       <if test="question != null" >
         #{question,jdbcType=VARCHAR},
       </if>
@@ -95,6 +110,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.test.entities.WorkRecord" >
     update workrecord
     <set >
+      <if test="UUID != null" >
+        UUID = #{UUID,jdbcType=VARCHAR},
+      </if>
       <if test="question != null" >
         question = #{question,jdbcType=VARCHAR},
       </if>
@@ -121,7 +139,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.test.entities.WorkRecord" >
     update workrecord
-    set question = #{question,jdbcType=VARCHAR},
+    set UUID = #{UUID,jdbcType=VARCHAR},
+      question = #{question,jdbcType=VARCHAR},
       beginDate = #{beginDate,jdbcType=TIMESTAMP},
       endDate = #{endDate,jdbcType=TIMESTAMP},
       comment = #{comment,jdbcType=VARCHAR},

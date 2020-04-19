@@ -2,9 +2,10 @@ package com.test.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Reply {
+public class Reply implements Serializable {
     private Integer rID;
 
     private String content;
