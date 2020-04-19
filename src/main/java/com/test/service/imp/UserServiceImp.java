@@ -32,7 +32,8 @@ public class UserServiceImp implements UserService {
         if(RedisUtil.hasKey(KEY_PREFIX+username))
             return (User) RedisUtil.get(KEY_PREFIX+username);
         User user = userMapper.selectByUsername(username);
-        RedisUtil.set(KEY_PREFIX+user.getUsername(),user, Duration.ofHours(1).getSeconds());
+        if(user!=null)
+            RedisUtil.set(KEY_PREFIX+user.getUsername(),user, Duration.ofHours(1).getSeconds());
         return user;
     }
 

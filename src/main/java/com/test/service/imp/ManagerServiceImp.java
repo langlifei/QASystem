@@ -37,8 +37,8 @@ public class ManagerServiceImp implements ManagerService {
                 newUser.setStatus(user.getStatus());
                 newUser.setVerifier(user.getVerifier());
                 RedisUtil.set(UserServiceImp.KEY_PREFIX+user.getUsername(),newUser, Duration.ofHours(1).getSeconds());
-                return user;
             }
+            return user;
         }
         return null;
     }
