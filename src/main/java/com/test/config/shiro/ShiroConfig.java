@@ -42,7 +42,12 @@ public class ShiroConfig {
         return securityManager;
     }
 
-    //Filter工厂,设置对应的过滤条件和跳转条件
+    //Filter工厂,设
+    //
+    //
+    //
+    //
+    // 对应的过滤条件和跳转条件
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();

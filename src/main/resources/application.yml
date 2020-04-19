@@ -4,7 +4,7 @@ spring:
     username: team
     password: team@2020
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://49.233.159.61:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置
     initialSize: 5
@@ -36,6 +36,6 @@ spring:
     timeout: 5000
     #默认是索引为0的数据库
     database: 0
-    password: 123456
+    password:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
