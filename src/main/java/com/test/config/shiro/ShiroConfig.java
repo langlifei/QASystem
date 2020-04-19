@@ -62,11 +62,19 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login","anon");
         filterChainDefinitionMap.put("/user/add","anon");
         filterChainDefinitionMap.put("/user/username","anon");
+        filterChainDefinitionMap.put("/icons/**","anon");
+        filterChainDefinitionMap.put("/js/**","anon");
+        filterChainDefinitionMap.put("/static/**","anon");
+        filterChainDefinitionMap.put("/index.html","anon");
+        filterChainDefinitionMap.put("/**.**","anon");
+        filterChainDefinitionMap.put("/","anon");
+//        filterChainDefinitionMap.put("/ant_design_pro/**","anon");
 //        filterChainDefinitionMap.put("/user/{username}","anon");
 //        filterChainDefinitionMap.put("/user/**","roles[user]");
 //        filterChainDefinitionMap.put("/admin/**","roles[admin]");
         //注:该行代码放在所有权限设置的后面.
         filterChainDefinitionMap.put("/**","jwt");
+//        shiroFilterFactoryBean.setLoginUrl("/index.html");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         System.out.println("Shiro拦截器工厂类注入成功");
         return shiroFilterFactoryBean;

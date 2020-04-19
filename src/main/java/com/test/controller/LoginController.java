@@ -51,6 +51,6 @@ public class LoginController {
             httpServletResponse.setHeader(JwtUtil.TOKEN_HEADER,token);
             return new ResponseBean(HttpStatus.OK.value(),"登录成功!",null);
         }else
-            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户密码错误...",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户密码错误!",null);
     }
 }

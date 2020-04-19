@@ -18,6 +18,9 @@ spring:
     testOnBorrow: false
     testOnReturn: false
     poolPreparedStatements: true
+  #配置html资源路径
+  thymeleaf:
+    prefix: classpath:static/
 
   ##默认密码为空
   redis:
@@ -39,3 +42,4 @@ spring:
     password:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
+
