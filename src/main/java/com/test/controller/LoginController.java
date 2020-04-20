@@ -8,7 +8,6 @@ import com.test.vo.ResponseBean;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +48,9 @@ public class LoginController {
             //将用户信息存入缓存
             RedisUtil.set("User::"+userInfo.getUsername(),userInfo, Duration.ofHours(1).getSeconds());
             httpServletResponse.setHeader(JwtUtil.TOKEN_HEADER,token);
-            return new ResponseBean(HttpStatus.OK.value(),"登录成功!",null);
+            //获取角色传递给前端
+            String role = userInfo.getRole();
+            return new ResponseBean(HttpStatus.OK.value(),"登录成功!",role);
         }else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户密码错误...",null);
     }

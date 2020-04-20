@@ -1,8 +1,8 @@
 spring:
   datasource:
     #   数据源基本配置
-    username: team
-    password: team@2020
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true
     type: com.alibaba.druid.pool.DruidDataSource

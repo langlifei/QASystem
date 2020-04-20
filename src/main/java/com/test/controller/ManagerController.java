@@ -62,6 +62,6 @@ public class ManagerController {
         if(managerService.updateUserStatus(user)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"修改状态成功!",null);
         else
-            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"修改失败!",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"修改状态失败!",null);
     }
 }
