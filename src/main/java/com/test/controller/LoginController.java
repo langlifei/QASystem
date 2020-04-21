@@ -50,6 +50,8 @@ public class LoginController {
             //将用户信息存入缓存
             RedisUtil.set("User::"+userInfo.getUsername(),userInfo, Duration.ofHours(1).getSeconds());
             httpServletResponse.setHeader(JwtUtil.TOKEN_HEADER,token);
+            //允许前端访问response中的Authorization字段.
+            httpServletResponse.setHeader("Access-Control-Expose-Headers", JwtUtil.TOKEN_HEADER);
             //获取角色传递给前端
             String role = userInfo.getRole();
             return new ResponseBean(HttpStatus.OK.value(),"登录成功!",role);

@@ -8,8 +8,31 @@
         <form method="post">
             用户名：<input name="username" type="text">
             密码：<input name="password" type="password">
-            <button type="button">登录</button>
+            <button type="button" onclick="f()">登录</button>
         </form>
-</body>
 
+</body>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script>
+        function f() {
+            var user = new Object();
+            user.username = $("input[name=username]").val();
+            user.password = $("input[name=password]").val();
+            $.ajax({
+                type: "POST",
+                url: "/api/login",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(user),
+                success: function (data,textStatus,request) {
+                    localStorage.token=request.getResponseHeader("Authorization");
+                    debugger
+                    location.href="mainPage.html";
+                },
+                error: function () {
+                    alert("错误!");
+                }
+            });
+        }
+</script>
 </html>

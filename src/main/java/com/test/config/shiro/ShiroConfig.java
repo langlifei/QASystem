@@ -57,6 +57,10 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/login","anon");
         filterChainDefinitionMap.put("/api/user/add","anon");
         filterChainDefinitionMap.put("/api/user/username","anon");
+        filterChainDefinitionMap.put("/js/**","anon");
+        filterChainDefinitionMap.put("/","anon");
+        filterChainDefinitionMap.put("/**.html","anon");
+        filterChainDefinitionMap.put("/websocket/**","anon");
 //        filterChainDefinitionMap.put("/user/{username}","anon");
 //        filterChainDefinitionMap.put("/user/**","roles[user]");
 //        filterChainDefinitionMap.put("/admin/**","roles[admin]");

@@ -18,9 +18,15 @@
         </div>
 </body>
     <script src="js/jquery-1.11.3.min.js"></script>
-    <script th:inline="javascript">
-        var username =[[${session.loginUser.getUsername()}]];
-        var reciver="-1";
+    <script>
+        var token = localStorage.getItem("token");
+        var username ="";
+        if(token!=null){
+            var data = decodeURIComponent(escape(window.atob(token.split('.')[1])))
+            username = JSON.parse(data).username;
+        }
+        var receiver="-1";
+        debugger;
         url ="ws://localhost:8080/websocket/"+username
         //创建一个webSocket实例
         var webSocket = new WebSocket(url);
@@ -33,7 +39,7 @@
             var data = ev.data;
             if(data!="连接成功"){
                 data = $.parseJSON(data);
-                reciver = data.from;
+                receiver = data.from;
                 $("#content").append("<li>"+data.from+"-"+data.date+"-------------:"+data.text+"</li>");
             }else {
                 console.log(data);
@@ -53,7 +59,7 @@
             var text = $("#text").val();
             var data= new Object();
             data.from=username;
-            data.to=reciver;
+            data.to=receiver;
             debugger;
             data.text=text;
             //发送消息

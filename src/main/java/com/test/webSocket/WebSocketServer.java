@@ -106,12 +106,9 @@ public class WebSocketServer {
             //给自己以外的所有在线人员发送消息,判断连接是否仍然打开,有可能正在关闭。。。
             if(webSocketServer!=this&&webSocketServer.session.isOpen()){
                 //开启多线程发送消息
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(webSocketServer.session.isOpen()){
-                            webSocketServer.sendMessage(message);
-                        }
+                new Thread(()->{
+                    if(webSocketServer.session.isOpen()){
+                        webSocketServer.sendMessage(message);
                     }
                 }).start();
             }
