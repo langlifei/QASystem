@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class LoginController {
 
     @Autowired
@@ -33,7 +35,7 @@ public class LoginController {
     public ResponseBean login(@RequestBody User user, HttpServletResponse httpServletResponse){
         User userInfo = userService.selectOne(user.getUsername());
         if(userInfo == null)
-            return new ResponseBean(HttpStatus.SERVICE_UNAVAILABLE.value(),"该用户名不存在!",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名不存在!",null);
         //因为账户使用了用户名+密码的加密形式
         //故对密码使用md5算法进行加密,并使用用户名作为盐值,加密次数为1024次
         String key = new Md5Hash(user.getPassword(), ByteSource.Util.bytes(user.getUsername()),1024).toString();

@@ -54,9 +54,9 @@ public class ShiroConfig {
         //设置拦截器,由于有顺序关系,所以使用LinkedHashMap.
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
         //开放登录,注册接口
-        filterChainDefinitionMap.put("/login","anon");
-        filterChainDefinitionMap.put("/user/add","anon");
-        filterChainDefinitionMap.put("/user/username","anon");
+        filterChainDefinitionMap.put("/api/login","anon");
+        filterChainDefinitionMap.put("/api/user/add","anon");
+        filterChainDefinitionMap.put("/api/user/username","anon");
 //        filterChainDefinitionMap.put("/user/{username}","anon");
 //        filterChainDefinitionMap.put("/user/**","roles[user]");
 //        filterChainDefinitionMap.put("/admin/**","roles[admin]");

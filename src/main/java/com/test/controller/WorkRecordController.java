@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workRecord")
+@RequestMapping("/api/workRecord")
 public class WorkRecordController {
 
     @Autowired
