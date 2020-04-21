@@ -1,7 +1,9 @@
 package com.test.controller;
 
 import com.test.entities.Reply;
+import com.test.entities.User;
 import com.test.entities.WorkRecord;
+import com.test.service.UserService;
 import com.test.service.WorkRecordService;
 import com.test.util.JwtUtil;
 import com.test.vo.ResponseBean;
@@ -19,6 +21,9 @@ public class WorkRecordController {
 
     @Autowired
     private WorkRecordService workRecordService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 新建工单
@@ -44,14 +49,18 @@ public class WorkRecordController {
      * @return
      */
 
-    @RequiresRoles("user")
     @GetMapping("/records")
     public ResponseBean getWorkRecords(HttpServletRequest request){
         String token = JwtUtil.getToken(request);
-        Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
-        List<WorkRecord> workRecords = workRecordService.getAllRecordsByUserID(userID);
+        String username = JwtUtil.getClaim(token,"username");
+        User user = userService.selectOne(username);
+        List<WorkRecord> workRecords = null;
+        if(user.getRole().equals("user"))
+            workRecords = workRecordService.getAllRecords(user.getUserID());
+        else
+            workRecords = workRecordService.getAllRecords();
         if(workRecords.size()==0)
-            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"您还没有工单创建过工单,快去创建吧!",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"没有工单!",null);
         return new ResponseBean(HttpStatus.OK.value(),"查找工单成功!",workRecords);
     }
 

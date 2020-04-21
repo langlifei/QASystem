@@ -18,4 +18,6 @@ public interface WorkRecordMapper {
     int updateByPrimaryKey(WorkRecord record);
 
     List<WorkRecord> selectByUserID(Integer userID);
+
+    List<WorkRecord> selectAll();
 }

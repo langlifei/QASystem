@@ -2,6 +2,7 @@ package com.test.controller;
 
 import com.test.entities.User;
 import com.test.service.UserService;
+import com.test.util.JwtUtil;
 import com.test.vo.ResponseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,4 +43,16 @@ public class UserController {
             return new ResponseBean(HttpStatus.OK.value(),"该用户名可用!",null);
     }
 
+    @GetMapping("/currentUser")
+    public ResponseBean getCurrentUser(HttpServletRequest request){
+        String token = request.getHeader(JwtUtil.TOKEN_HEADER).replace(JwtUtil.TOKEN_PREFIX,"").trim();
+        String username = JwtUtil.getClaim(token,"username");
+        User user = userService.selectOne(username);
+        if(user!=null){
+            user.setPassword("");
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"当前用户信息!",user);
+        }
+        else
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户信息不存在!",null);
+    }
 }

@@ -7,7 +7,6 @@ import com.test.entities.WorkRecord;
 import com.test.service.WorkRecordService;
 import com.test.vo.WorkRecordDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,8 +46,13 @@ public class WorkRecordImp implements WorkRecordService {
      * @return 工单集合
      */
     @Override
-    public List<WorkRecord> getAllRecordsByUserID(Integer userID) {
+    public List<WorkRecord> getAllRecords(Integer userID) {
         return workRecordMapper.selectByUserID(userID);
+    }
+
+    @Override
+    public List<WorkRecord> getAllRecords() {
+        return workRecordMapper.selectAll();
     }
 
     /**

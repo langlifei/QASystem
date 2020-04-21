@@ -47,8 +47,7 @@ public class LoginController {
             //进行签名
             String token = JwtUtil.sign(map);
             RedisUtil.set(JwtUtil.getRefreshToken()+user.getUsername(),token,JwtUtil.getRefreshTokenExpiration());
-            //将用户信息存入缓存
-            RedisUtil.set("User::"+userInfo.getUsername(),userInfo, Duration.ofHours(1).getSeconds());
+            //将token值放到response的首部
             httpServletResponse.setHeader(JwtUtil.TOKEN_HEADER,token);
             //允许前端访问response中的Authorization字段.
             httpServletResponse.setHeader("Access-Control-Expose-Headers", JwtUtil.TOKEN_HEADER);

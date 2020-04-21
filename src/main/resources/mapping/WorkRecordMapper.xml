@@ -32,6 +32,11 @@
     from workrecord
     where userID=#{userID,jdbcType=INTEGER}
   </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    *
+    from workrecord
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from workrecord
     where wID = #{wID,jdbcType=INTEGER}
