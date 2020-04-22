@@ -10,9 +10,10 @@
     <result column="comment" property="comment" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="userID" property="userID" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    wID, UUID, question, beginDate, endDate, comment, level, status
+    wID, UUID, question, beginDate, endDate, comment, level, status,userID
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -36,6 +37,25 @@
     select
     *
     from workrecord
+  </select>
+  <select id="selectTop" resultType="java.lang.Integer">
+    select
+    wID
+    from workrecord
+    <if test="userID != 0">
+    where userID=#{userID,jdbcType=INTEGER}
+    </if>
+    ORDER BY beginDate desc
+    limit 0,#{number,jdbcType=INTEGER}
+  </select>
+  <select id="getCountByStatus" resultType="java.lang.Integer"  parameterType="java.lang.Integer" >
+    select
+    count(*)
+    from workrecord
+    where status = #{status,jdbcType=INTEGER}
+    <if test="userID !=0">
+      and userID = #{userID,jdbcType=INTEGER}
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from workrecord

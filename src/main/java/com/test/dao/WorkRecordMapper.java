@@ -20,4 +20,8 @@ public interface WorkRecordMapper {
     List<WorkRecord> selectByUserID(Integer userID);
 
     List<WorkRecord> selectAll();
+
+    Integer getCountByStatus(Integer userID, Integer status);
+
+    List selectTop(Integer number, Integer userID);
 }

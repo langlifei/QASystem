@@ -3,9 +3,12 @@ package com.test.service.imp;
 import com.test.dao.ReplyMapper;
 import com.test.dao.WorkRecordMapper;
 import com.test.entities.Reply;
+import com.test.entities.User;
 import com.test.entities.WorkRecord;
+import com.test.service.UserService;
 import com.test.service.WorkRecordService;
 import com.test.vo.WorkRecordDetail;
+import com.test.vo.Workplace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,8 +23,12 @@ public class WorkRecordImp implements WorkRecordService {
 
     @Autowired
     private WorkRecordMapper workRecordMapper;
+
     @Autowired
     private ReplyMapper replyMapper;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * status(0表示未结单,1表示已结单)
@@ -79,7 +86,8 @@ public class WorkRecordImp implements WorkRecordService {
     @Override
     @Cacheable(value = "WorkRecord",key = "#wID",unless = "#result==null")
     public WorkRecord selectByWID(Integer wID) {
-        return workRecordMapper.selectByPrimaryKey(wID);
+        WorkRecord workRecord =  workRecordMapper.selectByPrimaryKey(wID);
+        return workRecord;
     }
 
     /**
@@ -114,5 +122,20 @@ public class WorkRecordImp implements WorkRecordService {
         replies.addAll(replyMapper.selectByWID(wID));
         workRecordDetail.setReplies(replies);
         return workRecordDetail;
+    }
+
+    @Override
+    public Workplace getWorkplaceInfo(String username) {
+        Workplace workplace = new Workplace();
+        User user = userService.selectOne(username);
+        Integer userID = 0;
+        if(user.getRole().equals("user"))
+            userID = user.getUserID();
+        workplace.setFinishedNumber(workRecordMapper.getCountByStatus(userID,1));
+        workplace.setUnfinishedNumber(workRecordMapper.getCountByStatus(userID,0));
+        //显示最近七条不同工单的最新回复.
+        List list = workRecordMapper.selectTop(7,userID);
+        workplace.setRecentReply(replyMapper.selectRecentReplyInWIDs(list,userID));
+        return workplace;
     }
 }

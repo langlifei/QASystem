@@ -3,6 +3,7 @@ package com.test.service;
 import com.test.entities.Reply;
 import com.test.entities.WorkRecord;
 import com.test.vo.WorkRecordDetail;
+import com.test.vo.Workplace;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface WorkRecordService {
     boolean insertReply(Reply reply);
     WorkRecord selectByWID(Integer wID);
     WorkRecordDetail getWorkRecordDetail(Integer wID);
+    Workplace getWorkplaceInfo(String username);
 }

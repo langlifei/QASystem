@@ -8,6 +8,7 @@ import com.test.service.WorkRecordService;
 import com.test.util.JwtUtil;
 import com.test.vo.ResponseBean;
 import com.test.vo.WorkRecordDetail;
+import com.test.vo.Workplace;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -110,7 +111,8 @@ public class WorkRecordController {
     @PostMapping("/reply")
     public ResponseBean reply(@RequestBody Reply reply,HttpServletRequest request){
         //查看工单是否关闭
-        if(workRecordService.selectByWID(reply.getwID()).getStatus()==1)
+        WorkRecord workRecord = workRecordService.selectByWID(reply.getwID());
+        if(workRecord.getStatus()==1)
             return new ResponseBean(HttpStatus.CONFLICT.value(),"工单已关闭,不能继续回复!",null);
         String token = JwtUtil.getToken(request);
         Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
@@ -133,5 +135,13 @@ public class WorkRecordController {
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"查看工单详情出错!",null);
         else
             return new ResponseBean(HttpStatus.OK.value(),"工单信息已返回!",workRecordDetail);
+    }
+
+    @GetMapping("/workplace")
+    public ResponseBean showWorkplace(HttpServletRequest request){
+        String token = JwtUtil.getToken(request);
+        String username = JwtUtil.getClaim(token,"username");
+        Workplace workplace =  workRecordService.getWorkplaceInfo(username);
+        return new ResponseBean(HttpStatus.OK.value(),"工作台信息已返回",workplace);
     }
 }
