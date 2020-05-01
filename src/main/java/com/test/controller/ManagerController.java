@@ -1,8 +1,11 @@
 package com.test.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.test.entities.User;
 import com.test.service.ManagerService;
 import com.test.util.JwtUtil;
+import com.test.vo.QueryBean;
 import com.test.vo.ResponseBean;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +22,21 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
+    private final Integer pageSize = 10;
+
     /**
      * 管理根据用户群体的不同状态信息获取不同的用户群体
-     * @param status 状态信息(-1表示管理员,0表示未审核,1表示已审核)
      * @return
      */
     @RequiresRoles(value = "admin")
-    @GetMapping("/users/{status}")
-    public ResponseBean getUsers(@PathVariable("status") Integer status){
-        String msg = "当前用户群体为空";
-        int httpStatus = HttpStatus.OK.value();
-        List<User> users = null;
-        switch (status){
-            case -1:
-            case 1:
-            case 0:
-                users = managerService.selectAllUserByStatus(status);
-                break;
-            default:
-                httpStatus = HttpStatus.BAD_REQUEST.value();
-                users = null;
-                msg = "用户状态信息有误!";
-                break;
-        }
-        if(users!=null)
-            msg = "查找成功!";
-        return new ResponseBean(httpStatus,msg,users);
+    @GetMapping("/users/{current}")
+    public QueryBean getUsers(@PathVariable Integer current, @RequestBody(required = false) User user){
+        if(user==null)
+            user = new User();
+        PageHelper.startPage(current,pageSize);
+        List<User> users = managerService.selectAllUser(user);
+        PageInfo pageInfo = new PageInfo(users);
+        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),pageSize,pageInfo.getPageNum());
     }
 
     /**

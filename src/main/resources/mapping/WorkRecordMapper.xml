@@ -33,10 +33,31 @@
     from workrecord
     where userID=#{userID,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.test.entities.WorkRecord">
     select
-    *
+    <include refid="Base_Column_List" />
     from workrecord
+    <where>
+      1=1
+      <if test="wID!=null">
+        and wID = #{wID,jdbcType=INTEGER}
+      </if>
+      <if test="question!=null">
+        and question like concat('%',#{question,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="status!=null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="beginDate!=null">
+        and beginDate &gt;= #{beginDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endDate != null" >
+        and endDate &lt;= #{endDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="userID!=0">
+        and userID = #{userID,jdbcType=INTEGER}
+      </if>
+    </where>
   </select>
   <select id="selectTop" resultType="java.lang.Integer">
     select

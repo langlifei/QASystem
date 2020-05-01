@@ -16,10 +16,6 @@ public class ManagerServiceImp implements ManagerService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public List<User> selectAllUserByStatus(Integer status) {
-        return userMapper.selectAllByStatus(status);
-    }
 
     @Override
     public User updateUserStatus(User user) {
@@ -41,5 +37,10 @@ public class ManagerServiceImp implements ManagerService {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public List<User> selectAllUser(User user) {
+        return userMapper.selectAll(user);
     }
 }

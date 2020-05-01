@@ -26,11 +26,34 @@
     from user
     where username = #{username,jdbcType=VARCHAR}
   </select>
-  <select id="selectAllByStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.test.entities.User" >
     select
     <include refid="Base_Column_List" />
     from user
-    where status = #{status,jdbcType=INTEGER}
+    <where>
+      1=1
+    <if test="userID!=null">
+     and userID = #{userID,jdbcType=INTEGER}
+    </if>
+    <if test="username!=null">
+      and username like concat('%',#{username,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="phone!=null">
+      and phone like concat('%',#{phone,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="registerDate!=null">
+      and registerDate &gt;= #{registerDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="role!=null">
+      and role = #{role,jdbcType=VARCHAR}
+    </if>
+    <if test="status!=null">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="verifier!=null">
+      and verifier like concat('%',#{verifier,jdbcType=VARCHAR},'%')
+    </if>
+    </where>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user

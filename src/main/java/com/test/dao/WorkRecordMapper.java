@@ -17,9 +17,7 @@ public interface WorkRecordMapper {
 
     int updateByPrimaryKey(WorkRecord record);
 
-    List<WorkRecord> selectByUserID(Integer userID);
-
-    List<WorkRecord> selectAll();
+    List<WorkRecord> selectAll(WorkRecord workRecord);
 
     Integer getCountByStatus(Integer userID, Integer status);
 

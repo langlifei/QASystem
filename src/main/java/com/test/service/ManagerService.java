@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ManagerService {
 
-    List<User> selectAllUserByStatus(Integer status);
-
     User updateUserStatus(User user);
+
+    List<User> selectAllUser(User user);
 }

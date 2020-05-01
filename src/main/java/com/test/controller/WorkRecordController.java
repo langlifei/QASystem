@@ -1,11 +1,14 @@
 package com.test.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.test.entities.Reply;
 import com.test.entities.User;
 import com.test.entities.WorkRecord;
 import com.test.service.UserService;
 import com.test.service.WorkRecordService;
 import com.test.util.JwtUtil;
+import com.test.vo.QueryBean;
 import com.test.vo.ResponseBean;
 import com.test.vo.WorkRecordDetail;
 import com.test.vo.Workplace;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -25,6 +29,8 @@ public class WorkRecordController {
 
     @Autowired
     private UserService userService;
+
+    private final int pageSize = 10;
 
     /**
      * 新建工单
@@ -50,19 +56,25 @@ public class WorkRecordController {
      * @return
      */
 
-    @GetMapping("/records")
-    public ResponseBean getWorkRecords(HttpServletRequest request){
+    @GetMapping("/records/{current}")
+    public QueryBean getWorkRecords(@PathVariable(value = "current") Integer currentPage,@RequestBody(required = false) WorkRecord workRecord,HttpServletRequest request) throws ParseException {
         String token = JwtUtil.getToken(request);
         String username = JwtUtil.getClaim(token,"username");
         User user = userService.selectOne(username);
         List<WorkRecord> workRecords = null;
-        if(user.getRole().equals("user"))
-            workRecords = workRecordService.getAllRecords(user.getUserID());
-        else
-            workRecords = workRecordService.getAllRecords();
+        //如果是管理员查询所有用户.
+        if(user.getRole().equals("admin")){
+            user.setUserID(0);
+        }
+        if(workRecord==null)
+            workRecord = new WorkRecord();
+        workRecord.setUserID(user.getUserID());
+        PageHelper.startPage(currentPage,pageSize);
+        workRecords = workRecordService.getAllRecords(workRecord);
         if(workRecords.size()==0)
-            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"没有工单!",null);
-        return new ResponseBean(HttpStatus.OK.value(),"查找工单成功!",workRecords);
+            return new QueryBean(null,0,pageSize,1);
+        PageInfo pageInfo= new PageInfo(workRecords);
+        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),pageSize,pageInfo.getPageNum());
     }
 
     /**
@@ -76,10 +88,9 @@ public class WorkRecordController {
         String  token = JwtUtil.getToken(request);
         int userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
         WorkRecord workRecord = workRecordService.selectByWID(wID);
-        if(workRecord==null&&workRecord.getUserID()==userID)
+        if(workRecord==null||workRecord.getUserID()!=userID)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"输入信息有误!",null);
-        workRecord.setStatus(1);
-        //status:1表示订单终结.
+        workRecord.setStatus(3);
         if(workRecordService.updateWorkRecord(workRecord)!=null)
             return new ResponseBean(HttpStatus.OK.value(),"工单已关闭!",null);
         else
@@ -94,7 +105,7 @@ public class WorkRecordController {
     @RequiresRoles("user")
     @PutMapping("/comment")
     public ResponseBean comment(@RequestBody WorkRecord workRecord){
-        if(workRecord.getStatus()!=1)
+        if(workRecord.getStatus()!=3)
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单还未关闭,关闭后再来评价!",null);
         else if(workRecord.getLevel()<1||workRecord.getLevel()>5)
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"评星等级必须在1~5之间",null);
@@ -112,10 +123,14 @@ public class WorkRecordController {
     public ResponseBean reply(@RequestBody Reply reply,HttpServletRequest request){
         //查看工单是否关闭
         WorkRecord workRecord = workRecordService.selectByWID(reply.getwID());
-        if(workRecord.getStatus()==1)
-            return new ResponseBean(HttpStatus.CONFLICT.value(),"工单已关闭,不能继续回复!",null);
         String token = JwtUtil.getToken(request);
         Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
+        if(workRecord.getStatus()==1&&workRecord.getUserID()!=userID){
+            workRecord.setStatus(2);
+            workRecordService.updateWorkRecord(workRecord);
+        }
+        if(workRecord.getStatus()==3)
+            return new ResponseBean(HttpStatus.CONFLICT.value(),"工单已关闭,不能继续回复!",null);
         reply.setUserID(userID);
         if(workRecordService.insertReply(reply))
             return new ResponseBean(HttpStatus.OK.value(),"回复成功!",null);
@@ -129,9 +144,12 @@ public class WorkRecordController {
      * @return
      */
     @GetMapping("/detail/{wID}")
-    public ResponseBean showDetail(@PathVariable("wID") Integer wID){
-        WorkRecordDetail workRecordDetail = workRecordService.getWorkRecordDetail(wID);
-        if (workRecordDetail==null)
+    public ResponseBean showDetail(@PathVariable("wID") Integer wID,HttpServletRequest request){
+        String  token = JwtUtil.getToken(request);
+        int userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
+        WorkRecordDetail workRecordDetail = workRecordService.getWorkRecordDetail(wID,userID);
+        //status=-1表示异常工单查询...
+        if (workRecordDetail.getWorkRecord().getStatus()==-1)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"查看工单详情出错!",null);
         else
             return new ResponseBean(HttpStatus.OK.value(),"工单信息已返回!",workRecordDetail);

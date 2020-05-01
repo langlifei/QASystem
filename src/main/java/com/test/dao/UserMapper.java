@@ -19,5 +19,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    List<User> selectAllByStatus(Integer status);
+    List<User> selectAll(User user);
 }

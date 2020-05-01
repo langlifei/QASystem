@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ public class WorkRecordImp implements WorkRecordService {
     private UserService userService;
 
     /**
-     * status(0表示未结单,1表示已结单)
+     * status(0表示逻辑删除,1表示未处理)
      * 新增用户的工单记录
      * @param workRecord 工单的信息
      * @return 是否创建成功
@@ -40,7 +42,7 @@ public class WorkRecordImp implements WorkRecordService {
     public WorkRecord insert(WorkRecord workRecord) {
         workRecord.setUUID(UUID.randomUUID().toString());
         workRecord.setBeginDate(new Date());//将当前时间设置为工单创建时间
-        workRecord.setStatus(0);//设置为0
+        workRecord.setStatus(1);//设置为1
         if(workRecordMapper.insertSelective(workRecord)>0)
             return workRecord;
         else
@@ -49,17 +51,16 @@ public class WorkRecordImp implements WorkRecordService {
 
     /**
      * 根据用户ID查找其所有的工单
-     * @param userID 用户ID
+     * @param
      * @return 工单集合
      */
     @Override
-    public List<WorkRecord> getAllRecords(Integer userID) {
-        return workRecordMapper.selectByUserID(userID);
-    }
-
-    @Override
-    public List<WorkRecord> getAllRecords() {
-        return workRecordMapper.selectAll();
+    public List<WorkRecord> getAllRecords(WorkRecord workRecord) throws ParseException {
+//        if(workRecord.getBeginDate()==null)
+//            workRecord.setBeginDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019.01.01 00:00:00"));
+//        if(workRecord.getEndDate()==null)
+//            workRecord.setEndDate(new Date());
+        return workRecordMapper.selectAll(workRecord);
     }
 
     /**
@@ -70,7 +71,8 @@ public class WorkRecordImp implements WorkRecordService {
     @Override
     @CachePut(value = "WorkRecord",key = "#workRecord.wID",unless = "#result==null")
     public WorkRecord updateWorkRecord(WorkRecord workRecord) {
-        if(workRecord.getStatus()!=null&&workRecord.getStatus()==1)
+        //工单关闭添加关闭时间....
+        if(workRecord.getStatus()!=null&&workRecord.getStatus()==3)
             workRecord.setEndDate(new Date());
         if(workRecordMapper.updateByPrimaryKeySelective(workRecord)>0)
             return workRecord;
@@ -106,16 +108,20 @@ public class WorkRecordImp implements WorkRecordService {
 
     @Override
     @Cacheable(value = "WorkRecord",key = "'detail'+#wID",unless = "#result.workRecord.status!=3")
-    public WorkRecordDetail getWorkRecordDetail(Integer wID) {
-        WorkRecord workRecord = selectByWID(wID);
-        if(workRecord==null)
-            return null;
+    public WorkRecordDetail getWorkRecordDetail(Integer wID,Integer userID) {
+        WorkRecordDetail workRecordDetail = new WorkRecordDetail();
+        WorkRecord workRecord = new WorkRecord();
+        workRecord.setStatus(-1);
+        workRecordDetail.setWorkRecord(workRecord);
+        workRecord = selectByWID(wID);
+        //由于做了缓存不能返回控制,否则会报错,故采用状态为-1做标记值....
+        if(workRecord==null || workRecord.getUserID()!=userID)
+            return workRecordDetail;
         //将工单内容作为第一条回复信息.
         Reply reply = new Reply();
         reply.setContent(workRecord.getQuestion());
         reply.setReplyTime(workRecord.getBeginDate());
         reply.setUserID(workRecord.getUserID());
-        WorkRecordDetail workRecordDetail = new WorkRecordDetail();
         workRecordDetail.setWorkRecord(workRecord);
         List<Reply> replies = new ArrayList<>();
         replies.add(reply);//添加第一条回复信息
@@ -131,10 +137,14 @@ public class WorkRecordImp implements WorkRecordService {
         Integer userID = 0;
         if(user.getRole().equals("user"))
             userID = user.getUserID();
-        workplace.setFinishedNumber(workRecordMapper.getCountByStatus(userID,1));
-        workplace.setUnfinishedNumber(workRecordMapper.getCountByStatus(userID,0));
+        workplace.setFinishedNumber(workRecordMapper.getCountByStatus(userID,3));
+        workplace.setUnfinishedNumber(workRecordMapper.getCountByStatus(userID,1)+workRecordMapper.getCountByStatus(userID,2));
         //显示最近七条不同工单的最新回复.
         List list = workRecordMapper.selectTop(7,userID);
+        if(list.size()==0){
+            workplace.setRecentReply(null);
+            return workplace;
+        }
         workplace.setRecentReply(replyMapper.selectRecentReplyInWIDs(list,userID));
         return workplace;
     }
