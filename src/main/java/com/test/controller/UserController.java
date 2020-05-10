@@ -45,11 +45,11 @@ public class UserController {
 
     @GetMapping("/currentUser")
     public ResponseBean getCurrentUser(HttpServletRequest request){
-        String token = request.getHeader(JwtUtil.TOKEN_HEADER).replace(JwtUtil.TOKEN_PREFIX,"").trim();
+        String token = JwtUtil.getToken(request);
         String username = JwtUtil.getClaim(token,"username");
         User user = userService.selectOne(username);
         if(user!=null){
-            user.setPassword("");
+            user.setPassword("");//不传递密码....
             return new ResponseBean(HttpStatus.OK.value(),"当前用户信息!",user);
         }
         else

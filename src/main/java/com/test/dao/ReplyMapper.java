@@ -23,4 +23,6 @@ public interface ReplyMapper {
     List<Reply> selectByWID(Integer wID);
 
     List<Reply> selectRecentReplyInWIDs(List wIDList,Integer userID);
+
+    List<Reply> selectRecentReplyUserID(Integer userID,Integer role);
 }

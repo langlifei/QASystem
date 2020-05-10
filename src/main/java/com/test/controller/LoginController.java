@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +32,7 @@ public class LoginController {
      */
     @PostMapping("/login")
     public ResponseBean login(@RequestBody User user, HttpServletResponse httpServletResponse){
+        System.out.println(user.getUsername());
         User userInfo = userService.selectOne(user.getUsername());
         if(userInfo == null)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名不存在!",null);

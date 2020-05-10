@@ -25,7 +25,7 @@ public class ManagerController {
     private final Integer pageSize = 10;
 
     /**
-     * 管理根据用户群体的不同状态信息获取不同的用户群体
+     * 管理根据用户的不同信息条件获取不同的用户群体
      * @return
      */
     @RequiresRoles(value = "admin")
@@ -48,7 +48,7 @@ public class ManagerController {
     @RequiresRoles(value = "admin")
     @PutMapping("/verify")
     public ResponseBean changeUserStatus(@RequestBody User user,HttpServletRequest request){
-        String token = request.getHeader(JwtUtil.TOKEN_HEADER).replace(JwtUtil.TOKEN_PREFIX,"").trim();
+        String token = JwtUtil.getToken(request);
         String verifier = JwtUtil.getClaim(token,"username");
         user.setVerifier(verifier);
         if(managerService.updateUserStatus(user)!=null)

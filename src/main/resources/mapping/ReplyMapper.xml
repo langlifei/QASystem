@@ -36,6 +36,18 @@
     </if>
   </select>
 
+  <select id="selectRecentReplyUserID" resultMap="BaseResultMap">
+    select * from (select r.* from workrecord w RIGHT JOIN reply r on w.wID = r.wID
+    WHERE w.status = 2
+    <if test="role!=0">
+      and w.userID = #{userID,jdbcType=INTEGER}
+    </if>
+      and r.userID != #{userID,jdbcType=INTEGER}
+    ORDER BY r.replyTime desc limit 1000000) m
+    GROUP BY m.wID
+    limit 0,7
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from reply
     where rID = #{rID,jdbcType=INTEGER}

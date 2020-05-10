@@ -140,13 +140,16 @@ public class WorkRecordImp implements WorkRecordService {
             userID = user.getUserID();
         workplace.setFinishedNumber(workRecordMapper.getCountByStatus(userID,3));
         workplace.setUnfinishedNumber(workRecordMapper.getCountByStatus(userID,1)+workRecordMapper.getCountByStatus(userID,2));
-        //显示最近七条不同工单的最新回复.
-        List list = workRecordMapper.selectTop(7,userID);
-        if(list.size()==0){
-            workplace.setRecentReply(null);
-            return workplace;
-        }
-        workplace.setRecentReply(replyMapper.selectRecentReplyInWIDs(list,userID));
+        workplace.setRecentReply(getRecentReply(user.getUserID(),user.getRole()));
         return workplace;
+    }
+
+    public List<Reply> getRecentReply(Integer userID,String role){
+        Integer flag;
+        if(role.equals("user"))
+            flag = 1;
+        else
+            flag = 0;
+       return replyMapper.selectRecentReplyUserID(userID,flag);
     }
 }

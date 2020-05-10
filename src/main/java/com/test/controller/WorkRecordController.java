@@ -30,7 +30,7 @@ public class WorkRecordController {
     @Autowired
     private UserService userService;
 
-    private final int pageSize = 10;
+    private final int PAGE_SIZE = 10;
 
     /**
      * 新建工单
@@ -64,17 +64,17 @@ public class WorkRecordController {
         List<WorkRecord> workRecords = null;
         //如果是管理员查询所有用户.
         if(user.getRole().equals("admin")){
-            user.setUserID(0);
+            user.setUserID(0);//0表示管理员查询所有的用户工单信息
         }
         if(workRecord==null)
             workRecord = new WorkRecord();
         workRecord.setUserID(user.getUserID());
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(currentPage,PAGE_SIZE);
         workRecords = workRecordService.getAllRecords(workRecord);
         if(workRecords.size()==0)
-            return new QueryBean(null,0,pageSize,1);
+            return new QueryBean(null,0,PAGE_SIZE,1);
         PageInfo pageInfo= new PageInfo(workRecords);
-        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),pageSize,pageInfo.getPageNum());
+        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),PAGE_SIZE,pageInfo.getPageNum());
     }
 
     /**
@@ -125,12 +125,14 @@ public class WorkRecordController {
         WorkRecord workRecord = workRecordService.selectByWID(reply.getwID());
         String token = JwtUtil.getToken(request);
         Integer userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
+        //如果当前工单状态是刚创建，且当前回复是客服回的，那么将工单状态改为进行中
         if(workRecord.getStatus()==1&&workRecord.getUserID()!=userID){
             workRecord.setStatus(2);
             workRecordService.updateWorkRecord(workRecord);
         }
         if(workRecord.getStatus()==3)
-            return new ResponseBean(HttpStatus.CONFLICT.value(),"工单已关闭,不能继续回复!",null);
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单已关闭,不能继续回复!",null);
+        //设置工单回复人
         reply.setUserID(userID);
         if(workRecordService.insertReply(reply))
             return new ResponseBean(HttpStatus.OK.value(),"回复成功!",null);
@@ -145,7 +147,7 @@ public class WorkRecordController {
      */
     @GetMapping("/detail/{wID}")
     public ResponseBean showDetail(@PathVariable("wID") Integer wID,HttpServletRequest request){
-        String  token = JwtUtil.getToken(request);
+        String token = JwtUtil.getToken(request);
         String username = JwtUtil.getClaim(token,"username");
         WorkRecordDetail workRecordDetail = workRecordService.getWorkRecordDetail(wID,username);
         //status=-1表示异常工单查询...
@@ -159,7 +161,7 @@ public class WorkRecordController {
     public ResponseBean showWorkplace(HttpServletRequest request){
         String token = JwtUtil.getToken(request);
         String username = JwtUtil.getClaim(token,"username");
-        Workplace workplace =  workRecordService.getWorkplaceInfo(username);
+        Workplace workplace = workRecordService.getWorkplaceInfo(username);
         return new ResponseBean(HttpStatus.OK.value(),"工作台信息已返回",workplace);
     }
 }
