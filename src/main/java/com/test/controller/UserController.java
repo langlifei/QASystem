@@ -50,7 +50,7 @@ public class UserController {
         User user = userService.selectOne(username);
         if(user!=null){
             user.setPassword("");
-            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"当前用户信息!",user);
+            return new ResponseBean(HttpStatus.OK.value(),"当前用户信息!",user);
         }
         else
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"用户信息不存在!",null);

@@ -146,8 +146,8 @@ public class WorkRecordController {
     @GetMapping("/detail/{wID}")
     public ResponseBean showDetail(@PathVariable("wID") Integer wID,HttpServletRequest request){
         String  token = JwtUtil.getToken(request);
-        int userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
-        WorkRecordDetail workRecordDetail = workRecordService.getWorkRecordDetail(wID,userID);
+        String username = JwtUtil.getClaim(token,"username");
+        WorkRecordDetail workRecordDetail = workRecordService.getWorkRecordDetail(wID,username);
         //status=-1表示异常工单查询...
         if (workRecordDetail.getWorkRecord().getStatus()==-1)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"查看工单详情出错!",null);

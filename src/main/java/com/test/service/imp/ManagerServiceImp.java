@@ -22,6 +22,7 @@ public class ManagerServiceImp implements ManagerService {
         switch (user.getStatus()){
             case 0:
             case 1:
+            case 2:
                 break;
             default:
                 return null;

@@ -15,6 +15,6 @@ public interface WorkRecordService {
     WorkRecord updateWorkRecord(WorkRecord workRecord);
     boolean insertReply(Reply reply);
     WorkRecord selectByWID(Integer wID);
-    WorkRecordDetail getWorkRecordDetail(Integer wID,Integer userID);
+    WorkRecordDetail getWorkRecordDetail(Integer wID,String userID);
     Workplace getWorkplaceInfo(String username);
 }

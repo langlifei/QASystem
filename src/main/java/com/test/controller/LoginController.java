@@ -36,6 +36,8 @@ public class LoginController {
         User userInfo = userService.selectOne(user.getUsername());
         if(userInfo == null)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名不存在!",null);
+        if(userInfo.getStatus()==1)
+            return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户未审核.",null);
         //因为账户使用了用户名+密码的加密形式
         //故对密码使用md5算法进行加密,并使用用户名作为盐值,加密次数为1024次
         String key = new Md5Hash(user.getPassword(), ByteSource.Util.bytes(user.getUsername()),1024).toString();

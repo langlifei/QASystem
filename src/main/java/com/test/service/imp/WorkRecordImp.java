@@ -108,14 +108,15 @@ public class WorkRecordImp implements WorkRecordService {
 
     @Override
     @Cacheable(value = "WorkRecord",key = "'detail'+#wID",unless = "#result.workRecord.status!=3")
-    public WorkRecordDetail getWorkRecordDetail(Integer wID,Integer userID) {
+    public WorkRecordDetail getWorkRecordDetail(Integer wID,String username) {
         WorkRecordDetail workRecordDetail = new WorkRecordDetail();
         WorkRecord workRecord = new WorkRecord();
         workRecord.setStatus(-1);
         workRecordDetail.setWorkRecord(workRecord);
         workRecord = selectByWID(wID);
+        User user = userService.selectOne(username);
         //由于做了缓存不能返回控制,否则会报错,故采用状态为-1做标记值....
-        if(workRecord==null || workRecord.getUserID()!=userID)
+        if(workRecord==null || (user.getRole().equals("user")&& workRecord.getUserID()!=user.getUserID()))
             return workRecordDetail;
         //将工单内容作为第一条回复信息.
         Reply reply = new Reply();
