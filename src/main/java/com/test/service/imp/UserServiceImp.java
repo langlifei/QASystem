@@ -1,11 +1,15 @@
 package com.test.service.imp;
 
+import com.test.annotation.LoggerOperator;
 import com.test.dao.UserMapper;
 import com.test.entities.User;
 import com.test.service.UserService;
+import com.test.util.GsonUtils;
 import com.test.util.RedisUtil;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +32,13 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public User selectOne(String username) {
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.info(username);
         //如果存在缓存,取出缓存数据
         if(RedisUtil.hasKey(KEY_PREFIX+username))
             return (User) RedisUtil.get(KEY_PREFIX+username);
         User user = userMapper.selectByUsername(username);
+        logger.info(GsonUtils.toJson(user));
         if(user!=null)
             RedisUtil.set(KEY_PREFIX+user.getUsername(),user, Duration.ofHours(1).getSeconds());
         return user;

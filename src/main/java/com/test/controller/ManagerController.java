@@ -2,6 +2,7 @@ package com.test.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.test.annotation.LoggerOperator;
 import com.test.entities.User;
 import com.test.service.ManagerService;
 import com.test.util.JwtUtil;
@@ -28,6 +29,7 @@ public class ManagerController {
      * 管理根据用户的不同信息条件获取不同的用户群体
      * @return
      */
+    @LoggerOperator(description = "获取不同条件的用户群体")
     @RequiresRoles(value = "admin")
     @GetMapping("/users/{current}")
     public QueryBean getUsers(@PathVariable Integer current, @RequestBody(required = false) User user){
@@ -45,6 +47,7 @@ public class ManagerController {
      * @param request
      * @return 1:{code:200,msg:修改状态成功!,null} 0:{code:400,msg:修改失败!,null}
      */
+    @LoggerOperator(description = "审核用户")
     @RequiresRoles(value = "admin")
     @PutMapping("/verify")
     public ResponseBean changeUserStatus(@RequestBody User user,HttpServletRequest request){

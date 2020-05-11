@@ -2,6 +2,7 @@ package com.test.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.test.annotation.LoggerOperator;
 import com.test.entities.Reply;
 import com.test.entities.User;
 import com.test.entities.WorkRecord;
@@ -38,6 +39,7 @@ public class WorkRecordController {
      * @param request
      * @return
      */
+    @LoggerOperator(description = "新建工单")
     @RequiresRoles("user")
     @PostMapping("/add")
     public ResponseBean add(@RequestBody WorkRecord workRecord, HttpServletRequest request){
@@ -56,6 +58,7 @@ public class WorkRecordController {
      * @return
      */
 
+    @LoggerOperator(description = "获取不同条件下的工单")
     @GetMapping("/records/{current}")
     public QueryBean getWorkRecords(@PathVariable(value = "current") Integer currentPage,@RequestBody(required = false) WorkRecord workRecord,HttpServletRequest request) throws ParseException {
         String token = JwtUtil.getToken(request);
@@ -82,6 +85,7 @@ public class WorkRecordController {
      * @param wID 工单ID
      * @return
      */
+    @LoggerOperator(description = "关闭工单")
     @RequiresRoles("user")
     @PutMapping("/shutdown/{wID}")
     public ResponseBean shutdownRecord(@PathVariable("wID") Integer wID,HttpServletRequest request){
@@ -102,6 +106,7 @@ public class WorkRecordController {
      * @param workRecord 必须传入wID,comment,level,status
      * @return
      */
+    @LoggerOperator(description = "评价工单")
     @RequiresRoles("user")
     @PutMapping("/comment")
     public ResponseBean comment(@RequestBody WorkRecord workRecord){
@@ -119,6 +124,7 @@ public class WorkRecordController {
      * @param request
      * @return 200 回复成功; 400 输入信息有误!; 409 工单关闭,不允许回复
      */
+    @LoggerOperator(description = "回复工单")
     @PostMapping("/reply")
     public ResponseBean reply(@RequestBody Reply reply,HttpServletRequest request){
         //查看工单是否关闭
@@ -145,6 +151,7 @@ public class WorkRecordController {
      * @param wID 工单ID
      * @return
      */
+    @LoggerOperator(description = "查看工单详情信息")
     @GetMapping("/detail/{wID}")
     public ResponseBean showDetail(@PathVariable("wID") Integer wID,HttpServletRequest request){
         String token = JwtUtil.getToken(request);
@@ -157,6 +164,7 @@ public class WorkRecordController {
             return new ResponseBean(HttpStatus.OK.value(),"工单信息已返回!",workRecordDetail);
     }
 
+    @LoggerOperator(description = "查看工作台信息")
     @GetMapping("/workplace")
     public ResponseBean showWorkplace(HttpServletRequest request){
         String token = JwtUtil.getToken(request);

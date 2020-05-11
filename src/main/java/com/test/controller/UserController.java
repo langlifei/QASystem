@@ -1,5 +1,6 @@
 package com.test.controller;
 
+import com.test.annotation.LoggerOperator;
 import com.test.entities.User;
 import com.test.service.UserService;
 import com.test.util.JwtUtil;
@@ -22,6 +23,7 @@ public class UserController {
      * @param user 必须传入用户名(必须唯一),用户密码,手机号码
      * @return
      */
+    @LoggerOperator(description = "添加用户")
     @PostMapping("/add")
     public ResponseBean add(@RequestBody User user){
         if(userService.insert(user)!=null)
@@ -35,6 +37,7 @@ public class UserController {
      * @param user 用户(只接收用户名)
      * @return
      */
+    @LoggerOperator(description = "查看用户名是否重复")
     @GetMapping("/username")
     public ResponseBean isExist(@RequestBody User user){
         if(userService.selectOne(user.getUsername())!=null)
@@ -43,6 +46,7 @@ public class UserController {
             return new ResponseBean(HttpStatus.OK.value(),"该用户名可用!",null);
     }
 
+    @LoggerOperator(description = "获取当前用户信息")
     @GetMapping("/currentUser")
     public ResponseBean getCurrentUser(HttpServletRequest request){
         String token = JwtUtil.getToken(request);

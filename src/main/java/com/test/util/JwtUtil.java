@@ -30,7 +30,10 @@ public class JwtUtil {
 
 
     public static String getToken(HttpServletRequest request){
-        String token = request.getHeader(TOKEN_HEADER).replace(TOKEN_PREFIX,"").trim();
+        String token = request.getHeader(TOKEN_HEADER);
+        if(token!=null){
+            token = token.replace(TOKEN_PREFIX,"").trim();
+        }
         return token;
     }
 
