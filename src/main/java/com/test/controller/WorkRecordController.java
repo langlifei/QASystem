@@ -31,8 +31,6 @@ public class WorkRecordController {
     @Autowired
     private UserService userService;
 
-    private final int PAGE_SIZE = 10;
-
     /**
      * 新建工单
      * @param workRecord 必须传入question
@@ -59,12 +57,16 @@ public class WorkRecordController {
      */
 
     @LoggerOperator(description = "获取不同条件下的工单")
-    @GetMapping("/records/{current}")
-    public QueryBean getWorkRecords(@PathVariable(value = "current") Integer currentPage,@RequestBody(required = false) WorkRecord workRecord,HttpServletRequest request) throws ParseException {
+    @PostMapping("/records/{current}/{pageSize}")
+    public QueryBean getWorkRecords(@PathVariable(value = "current") Integer currentPage,@PathVariable(required = false) Integer pageSize,@RequestBody(required = false) WorkRecord workRecord,HttpServletRequest request) throws ParseException {
         String token = JwtUtil.getToken(request);
         String username = JwtUtil.getClaim(token,"username");
         User user = userService.selectOne(username);
         List<WorkRecord> workRecords = null;
+        if(currentPage==null)
+            currentPage = 1;
+        if(pageSize==null)
+            pageSize = 10;
         //如果是管理员查询所有用户.
         if(user.getRole().equals("admin")){
             user.setUserID(0);//0表示管理员查询所有的用户工单信息
@@ -72,12 +74,12 @@ public class WorkRecordController {
         if(workRecord==null)
             workRecord = new WorkRecord();
         workRecord.setUserID(user.getUserID());
-        PageHelper.startPage(currentPage,PAGE_SIZE);
+        PageHelper.startPage(currentPage,pageSize);
         workRecords = workRecordService.getAllRecords(workRecord);
         if(workRecords.size()==0)
-            return new QueryBean(null,0,PAGE_SIZE,1);
+            return new QueryBean(null,0,pageSize,1);
         PageInfo pageInfo= new PageInfo(workRecords);
-        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),PAGE_SIZE,pageInfo.getPageNum());
+        return new QueryBean(pageInfo.getList(), (int) pageInfo.getTotal(),pageSize,pageInfo.getPageNum());
     }
 
     /**
@@ -87,7 +89,7 @@ public class WorkRecordController {
      */
     @LoggerOperator(description = "关闭工单")
     @RequiresRoles("user")
-    @PutMapping("/shutdown/{wID}")
+    @PostMapping("/shutdown/{wID}")
     public ResponseBean shutdownRecord(@PathVariable("wID") Integer wID,HttpServletRequest request){
         String  token = JwtUtil.getToken(request);
         int userID = Integer.parseInt(JwtUtil.getClaim(token,"userID"));
@@ -108,7 +110,7 @@ public class WorkRecordController {
      */
     @LoggerOperator(description = "评价工单")
     @RequiresRoles("user")
-    @PutMapping("/comment")
+    @PostMapping("/comment")
     public ResponseBean comment(@RequestBody WorkRecord workRecord){
         if(workRecord.getStatus()!=3)
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单还未关闭,关闭后再来评价!",null);

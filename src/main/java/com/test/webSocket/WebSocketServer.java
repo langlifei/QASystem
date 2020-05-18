@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/websocket/{username}")
 @Component
-public class WebSocketServer {
+public class WebSocketServer implements WebSocket{
 
     //静态变量，用来记录当前在线连接数。(如果需要精准统计人数，需要给该变量加锁)
     private static int onlineCount = 0;

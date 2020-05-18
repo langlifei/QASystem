@@ -38,7 +38,7 @@ public class UserController {
      * @return
      */
     @LoggerOperator(description = "查看用户名是否重复")
-    @GetMapping("/username")
+    @PostMapping("/username")
     public ResponseBean isExist(@RequestBody User user){
         if(userService.selectOne(user.getUsername())!=null)
             return new ResponseBean(HttpStatus.BAD_REQUEST.value(),"该用户名已存在!",null);

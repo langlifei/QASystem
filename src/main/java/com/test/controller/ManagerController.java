@@ -23,18 +23,20 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
-    private final Integer pageSize = 10;
-
     /**
      * 管理根据用户的不同信息条件获取不同的用户群体
      * @return
      */
     @LoggerOperator(description = "获取不同条件的用户群体")
     @RequiresRoles(value = "admin")
-    @GetMapping("/users/{current}")
-    public QueryBean getUsers(@PathVariable Integer current, @RequestBody(required = false) User user){
+    @PostMapping("/users/{current}/{pageSize}")
+    public QueryBean getUsers(@PathVariable(required = false) Integer current,@PathVariable(required = false) Integer pageSize, @RequestBody(required = false) User user){
         if(user==null)
             user = new User();
+        if(current==null)
+            current = 1;
+        if(pageSize==null)
+            pageSize = 10;
         PageHelper.startPage(current,pageSize);
         List<User> users = managerService.selectAllUser(user);
         PageInfo pageInfo = new PageInfo(users);
@@ -49,7 +51,7 @@ public class ManagerController {
      */
     @LoggerOperator(description = "审核用户")
     @RequiresRoles(value = "admin")
-    @PutMapping("/verify")
+    @PostMapping("/verify")
     public ResponseBean changeUserStatus(@RequestBody User user,HttpServletRequest request){
         String token = JwtUtil.getToken(request);
         String verifier = JwtUtil.getClaim(token,"username");

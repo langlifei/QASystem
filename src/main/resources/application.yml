@@ -4,7 +4,7 @@ spring:
     username: team
     password: team@2020
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://172.26.115.127:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置
     initialSize: 5
@@ -21,7 +21,7 @@ spring:
 
   ##默认密码为空
   redis:
-    host: 127.0.0.1
+    host: 172.26.115.127
     # Redis服务器连接端口
     port: 6379
     jedis:
