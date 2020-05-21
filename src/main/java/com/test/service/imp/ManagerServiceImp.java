@@ -27,15 +27,20 @@ public class ManagerServiceImp implements ManagerService {
             default:
                 return null;
         }
-        if(userMapper.updateByPrimaryKeySelective(user)>0){
+        User oldUser = userMapper.selectByPrimaryKey(user.getUserID());
+        if(oldUser==null){
+            return null;
+        }
+        //修改状态
+        oldUser.setStatus(user.getStatus());
+        //修改审核人
+        oldUser.setVerifier(user.getVerifier());
+        if(userMapper.updateByPrimaryKeySelective(oldUser)>0){
             //如果缓存中有该用户信息,对其进行更新.
-            if(RedisUtil.hasKey(UserServiceImp.KEY_PREFIX+user.getUsername())){
-                User newUser = (User) RedisUtil.get(UserServiceImp.KEY_PREFIX+user.getUsername());
-                newUser.setStatus(user.getStatus());
-                newUser.setVerifier(user.getVerifier());
-                RedisUtil.set(UserServiceImp.KEY_PREFIX+user.getUsername(),newUser, Duration.ofHours(1).getSeconds());
+            if(RedisUtil.hasKey(UserServiceImp.KEY_PREFIX+oldUser.getUsername())){
+                RedisUtil.set(UserServiceImp.KEY_PREFIX+oldUser.getUsername(),oldUser, Duration.ofHours(1).getSeconds());
             }
-            return user;
+            return oldUser;
         }
         return null;
     }

@@ -1,10 +1,10 @@
 spring:
   datasource:
     #   数据源基本配置
-    username: team
-    password: team@2020
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.26.115.127:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/workorders?serverTimezone=GMT%2B8&allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置
     initialSize: 5
@@ -21,7 +21,7 @@ spring:
 
   ##默认密码为空
   redis:
-    host: 172.26.115.127
+    host: 127.0.0.1
     # Redis服务器连接端口
     port: 6379
     jedis:
@@ -36,7 +36,7 @@ spring:
     timeout: 10000
     #默认是索引为0的数据库
     database: 0
-    password:
+    password: 123456
 mybatis:
   mapper-locations: classpath:mapping/*.xml
 
