@@ -1,6 +1,7 @@
 package com.test.dao;
 
 import com.test.entities.Reply;
+import com.test.vo.ExtendReply;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.cache.annotation.Cacheable;
 
@@ -20,7 +21,7 @@ public interface ReplyMapper {
 
     int updateByPrimaryKey(Reply record);
 
-    List<Reply> selectByWID(Integer wID);
+    List<ExtendReply> selectByWID(Integer wID);
 
     List<Reply> selectRecentReplyInWIDs(List wIDList,Integer userID);
 

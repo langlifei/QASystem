@@ -32,13 +32,10 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public User selectOne(String username) {
-        Logger logger = LoggerFactory.getLogger(this.getClass());
-        logger.info(username);
         //如果存在缓存,取出缓存数据
         if(RedisUtil.hasKey(KEY_PREFIX+username))
             return (User) RedisUtil.get(KEY_PREFIX+username);
         User user = userMapper.selectByUsername(username);
-        logger.info(GsonUtils.toJson(user));
         if(user!=null)
             RedisUtil.set(KEY_PREFIX+user.getUsername(),user, Duration.ofHours(1).getSeconds());
         return user;

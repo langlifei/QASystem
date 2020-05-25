@@ -54,6 +54,7 @@
       and verifier like concat('%',#{verifier,jdbcType=VARCHAR},'%')
     </if>
     </where>
+    order by registerDate desc
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from user

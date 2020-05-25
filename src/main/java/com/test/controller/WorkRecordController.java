@@ -116,7 +116,10 @@ public class WorkRecordController {
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"工单还未关闭,关闭后再来评价!",null);
         else if(workRecord.getLevel()<1||workRecord.getLevel()>5)
             return  new ResponseBean(HttpStatus.BAD_REQUEST.value(),"评星等级必须在1~5之间",null);
-        workRecordService.updateWorkRecord(workRecord);
+        WorkRecord oldWorkRecord = workRecordService.selectByWID(workRecord.getwID());
+        oldWorkRecord.setLevel(workRecord.getLevel());
+        oldWorkRecord.setComment(workRecord.getComment());
+        workRecordService.updateWorkRecord(oldWorkRecord);
         return new ResponseBean(HttpStatus.OK.value(),"评价成功!",null);
     }
 

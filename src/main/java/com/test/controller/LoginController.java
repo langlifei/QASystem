@@ -1,6 +1,5 @@
 package com.test.controller;
 
-import com.test.annotation.LoggerOperator;
 import com.test.entities.User;
 import com.test.service.UserService;
 import com.test.util.JwtUtil;
@@ -31,7 +30,6 @@ public class LoginController {
      * @param httpServletResponse
      * @return 1:{code:200,msg:登录成功,null} 0:{code:400,msg:用户密码错误,null}
      */
-    @LoggerOperator(description = "用户登录")
     @PostMapping("/login")
     public ResponseBean login(@RequestBody User user, HttpServletResponse httpServletResponse){
         User userInfo = userService.selectOne(user.getUsername());

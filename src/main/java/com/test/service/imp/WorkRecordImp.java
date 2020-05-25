@@ -7,6 +7,7 @@ import com.test.entities.User;
 import com.test.entities.WorkRecord;
 import com.test.service.UserService;
 import com.test.service.WorkRecordService;
+import com.test.vo.ExtendReply;
 import com.test.vo.WorkRecordDetail;
 import com.test.vo.Workplace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,12 +120,15 @@ public class WorkRecordImp implements WorkRecordService {
         if(workRecord==null || (user.getRole().equals("user")&& workRecord.getUserID()!=user.getUserID()))
             return workRecordDetail;
         //将工单内容作为第一条回复信息.
-        Reply reply = new Reply();
+        ExtendReply reply = new ExtendReply();
         reply.setContent(workRecord.getQuestion());
         reply.setReplyTime(workRecord.getBeginDate());
         reply.setUserID(workRecord.getUserID());
+        User replyUser = userService.selectByUserID(reply.getUserID());
+        reply.setUsername(replyUser.getUsername());
+        reply.setRole(replyUser.getRole());
         workRecordDetail.setWorkRecord(workRecord);
-        List<Reply> replies = new ArrayList<>();
+        List<ExtendReply> replies = new ArrayList<>();
         replies.add(reply);//添加第一条回复信息
         replies.addAll(replyMapper.selectByWID(wID));
         workRecordDetail.setReplies(replies);

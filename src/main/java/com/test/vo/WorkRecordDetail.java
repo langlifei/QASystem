@@ -7,7 +7,7 @@ import java.util.List;
 
 public class WorkRecordDetail {
     private WorkRecord workRecord;
-    private List<Reply> replies;
+    private List<ExtendReply> replies;
 
     public WorkRecord getWorkRecord() {
         return workRecord;
@@ -17,11 +17,11 @@ public class WorkRecordDetail {
         this.workRecord = workRecord;
     }
 
-    public List<Reply> getReplies() {
+    public List<ExtendReply> getReplies() {
         return replies;
     }
 
-    public void setReplies(List<Reply> replies) {
+    public void setReplies(List<ExtendReply> replies) {
         this.replies = replies;
     }
 }

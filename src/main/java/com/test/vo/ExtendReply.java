@@ -1,6 +1,7 @@
 package com.test.vo;
 
 import com.test.entities.Reply;
+import org.springframework.data.redis.core.index.PathBasedRedisIndexDefinition;
 
 /**
  * @Author Zeng Zhuo
@@ -10,6 +11,7 @@ import com.test.entities.Reply;
 
 public class ExtendReply extends Reply {
     private String username;
+    private String role;
 
     public String getUsername() {
         return username;
@@ -17,5 +19,13 @@ public class ExtendReply extends Reply {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

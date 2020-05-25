@@ -8,6 +8,14 @@
     <result column="wID" property="wID" jdbcType="INTEGER" />
     <result column="userID" property="userID" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="ExtendResultMap" type="com.test.vo.ExtendReply" >
+    <id column="rID" property="rID" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="replyTime" property="replyTime" jdbcType="TIMESTAMP" />
+    <result column="userID" property="userID" jdbcType="INTEGER"/>
+    <result column="username" property="username" jdbcType="VARCHAR"/>
+    <result column="role" property="role" jdbcType="VARCHAR"/>
+  </resultMap>
   <sql id="Base_Column_List" >
      content, replyTime, userID
   </sql>
@@ -17,11 +25,10 @@
     from reply
     where rID = #{rID,jdbcType=INTEGER}
   </select>
-  <select id="selectByWID" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from reply
-    where wID = #{wID,jdbcType=INTEGER} order by replyTime
+  <select id="selectByWID" resultMap="ExtendResultMap" parameterType="java.lang.Integer" >
+    select content,replyTime,reply.userID,username,role from reply
+    LEFT JOIN user on reply.userID = user.userID
+    where wID = #{rID,jdbcType=INTEGER} order by replyTime
   </select>
   <select id="selectRecentReplyInWIDs" resultMap="BaseResultMap">
     select a.* from reply a INNER JOIN
